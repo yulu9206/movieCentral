@@ -1,16 +1,16 @@
 {% extends "nav.html" %}
 {% load staticfiles %}
 
-{% block content %}
+{% block home %}
 
 <div class="jumbotron text-center">
   <div class="container">
     <a href="/" class="lang-logo">
       <img src="{% static 'logo.png'%}">
-  </a>
-  <p>Watch anywhere anytime.</p>
-	<a type="button" class="btn btn-lg btn-primary" href="/login"><span class="glyphicon glyphicon-flash"></span> Start Free Trial</a>
-</div>
+    </a>
+    <p>Watch anywhere anytime.</p>
+	  <a type="button" class="btn btn-lg btn-primary" href="/login"><span class="glyphicon glyphicon-flash"></span> Start Free Trial</a>
+  </div>
      
     <!--<a type="button" class="btn btn-lg btn-default" href="https://devcenter.heroku.com/articles/getting-started-with-python"><span class="glyphicon glyphicon-flash"></span> Getting Started with Python</a>
     <a type="button" class="btn btn-lg btn-primary" href="https://github.com/heroku/python-getting-started"><span class="glyphicon glyphicon-download"></span> Source on GitHub</a>

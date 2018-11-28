@@ -1,83 +1,53 @@
 <!DOCTYPE html>
 <html>
+{% load static %}
 <head>
 <title>Movie Central</title>
-  <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-  <script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-  <style type="text/css">
-    .jumbotron {
-        /* background: white; */
-        background-image: url(../img/dices-over-newspaper.jpg);
-        color: white;
-        padding-bottom: 80px
-    }
-    .jumbotron .btn-primary {
-        background: orangered;
-        border-color: orangered;
-    }
-    /* .jumbotron .btn-primary:hover {
-        background: #7646c1
-    } */
-    .jumbotron p {
-        color: grey;
-        max-width: 75%;
-        margin: 1em auto 2em
-    }
-    .navbar+.jumbotron {
-        margin-top: -20px
-    }
-    .jumbotron .lang-logo {
-        display: block;
-        background: white;
-        /* border-radius: 50%; */
-        /* overflow: hidden; */
-        /* width: 100px; */
-        /* height: 100px; */
-        margin: auto;
-        padding: 20px;
-        border: 20px solid white;
-    }
-    .jumbotron .lang-logo img {
-        max-width: 100%
-    }
-
-
-  </style>
+<link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
 </head>
+
 <body>
-<nav class="navbar navbar-default navbar-static-top">
+<nav class="navbar navbar-default navbar-static-top navbar-inverse">
   <div class="container">
     <ul class="nav navbar-nav">
       <li class="active">
         <a href="/"><span class="glyphicon glyphicon-home"></span> MC Home</a>
       </li>
       <li>
-        <a href="movies"><span class="glyphicon glyphicon-film"></span> Movies(after logging in)</a>
+        <a href="/movies"><span class="glyphicon glyphicon-film"></span> Movies(after logging in)</a>
       </li>
       <li>
-        <a href="customers"><span class="glyphicon glyphicon-info-sign"></span> Customers(admin)</a>
+        <a href="/customers"><span class="glyphicon glyphicon-info-sign"></span> Customers(admin)</a>
       </li>
       <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-briefcase"></span> Reports(admin) <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
-            <li><a href="reports">Revenue</a></li>
+            <li><a href="/reports">Revenue</a></li>
             <!-- <li><a href="hw2">HW: Python Finance Info</a></li> -->
           </ul>
       </li>
     </ul>
     <ul class="nav navbar-nav navbar-right">
 		<li class="navbar-right">
-			<a href="login"><span class="glyphicon glyphicon-user"></span> Login/Register(without logging in)</a>
+			<a href="/login"><span class="glyphicon glyphicon-user"></span> Login/Register(without logging in)</a>
 		</li>
 		<li class="navbar-right">
-			<a href="customer-detail"><span class="glyphicon glyphicon-user"></span> Profile(after logging in)</a>
+			<a href="/customer-detail"><span class="glyphicon glyphicon-user"></span> Profile(after logging in)</a>
 		</li>
     </ul>
   </div>
 </nav>
 
-{% block content %}{% endblock %}
+{% block home %}{% endblock %}
+{% block customers %}{% endblock %}
+{% block customerDetail %}{% endblock %}
+{% block movies %}{% endblock %}
+{% block movieDetail %}{% endblock %}
+{% block login %}{% endblock %}
+{% block reports %}{% endblock %}
 
 </body>
 </html>
