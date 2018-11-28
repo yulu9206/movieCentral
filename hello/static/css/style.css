@@ -114,7 +114,7 @@ label {
 
 label.error {
   position: relative;
-  background: url("../images/unchecked.gif") no-repeat;
+  /* background: url("../images/unchecked.gif") no-repeat; */
   background-position-y: 3px;
   padding-left: 20px;
   display: block;
@@ -235,9 +235,6 @@ label.valid {
     -webkit-justify-content: center;
     -o-justify-content: center;
     -ms-justify-content: center; }
-
-  /* .form-button {
-    text-align: center; } */
 
   .signin-form {
     order: 1;
