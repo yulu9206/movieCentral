@@ -1,4 +1,5 @@
 import os
+import json
 # import requests
 
 from django.conf import settings
@@ -15,7 +16,51 @@ def login(request):
 	return render(request, 'login.html')
 
 def movies(request):
-	return render(request, 'movies.html')
+	# get-data
+	data = [
+    {"movieId": 1, "title": "Fantastic Beasts", "trailerUrl": "https://www.youtube.com/watch?v=TiblmGnet2Q",
+    "releaseDate": "2018-11-16", "mpaaRatingId": "PG-13", "Length": "2h13m", "country":"US", "Price":2.99,
+    "Studio": "Warner Bros. Pictures", "Synopsis": "asdf", "Type": 4,
+	"img":"https://imgc.allpostersimages.com/img/print/u-g-F8TKQV0.jpg?w=900&h=900&p=0"},
+    {"movieId": 1, "title": "Fantastic Beasts", "trailerUrl": "https://www.youtube.com/watch?v=TiblmGnet2Q",
+    "releaseDate": "2018-11-16", "mpaaRatingId": "PG-13", "Length": "2h13m", "country":"US", "Price":2.99,
+    "Studio": "Warner Bros. Pictures", "Synopsis": "asdf", "Type": 4,
+	"img":"https://imgc.allpostersimages.com/img/print/u-g-F8TKQV0.jpg?w=900&h=900&p=0"},
+    {"movieId": 1, "title": "Fantastic Beasts", "trailerUrl": "https://www.youtube.com/watch?v=TiblmGnet2Q",
+    "releaseDate": "2018-11-16", "mpaaRatingId": "PG-13", "Length": "2h13m", "country":"US", "Price":2.99,
+    "Studio": "Warner Bros. Pictures", "Synopsis": "asdf", "Type": 4,
+	"img":"https://imgc.allpostersimages.com/img/print/u-g-F8TKQV0.jpg?w=900&h=900&p=0"},
+	{"movieId": 1, "title": "Fantastic Beasts", "trailerUrl": "https://www.youtube.com/watch?v=TiblmGnet2Q",
+    "releaseDate": "2018-11-16", "mpaaRatingId": "PG-13", "Length": "2h13m", "country":"US", "Price":2.99,
+    "Studio": "Warner Bros. Pictures", "Synopsis": "asdf", "Type": 4,
+	"img":"https://imgc.allpostersimages.com/img/print/u-g-F8TKQV0.jpg?w=900&h=900&p=0"},
+	{"movieId": 1, "title": "Fantastic Beasts", "trailerUrl": "https://www.youtube.com/watch?v=TiblmGnet2Q",
+    "releaseDate": "2018-11-16", "mpaaRatingId": "PG-13", "Length": "2h13m", "country":"US", "Price":2.99,
+    "Studio": "Warner Bros. Pictures", "Synopsis": "asdf", "Type": 4,
+	"img":"https://imgc.allpostersimages.com/img/print/u-g-F8TKQV0.jpg?w=900&h=900&p=0"},
+	{"movieId": 1, "title": "Fantastic Beasts", "trailerUrl": "https://www.youtube.com/watch?v=TiblmGnet2Q",
+    "releaseDate": "2018-11-16", "mpaaRatingId": "PG-13", "Length": "2h13m", "country":"US", "Price":2.99,
+    "Studio": "Warner Bros. Pictures", "Synopsis": "asdf", "Type": 4,
+	"img":"https://imgc.allpostersimages.com/img/print/u-g-F8TKQV0.jpg?w=900&h=900&p=0"},
+	{"movieId": 1, "title": "Fantastic Beasts", "trailerUrl": "https://www.youtube.com/watch?v=TiblmGnet2Q",
+    "releaseDate": "2018-11-16", "mpaaRatingId": "PG-13", "Length": "2h13m", "country":"US", "Price":2.99,
+    "Studio": "Warner Bros. Pictures", "Synopsis": "asdf", "Type": 4,
+	"img":"https://imgc.allpostersimages.com/img/print/u-g-F8TKQV0.jpg?w=900&h=900&p=0"},
+	{"movieId": 1, "title": "Fantastic Beasts", "trailerUrl": "https://www.youtube.com/watch?v=TiblmGnet2Q",
+    "releaseDate": "2018-11-16", "mpaaRatingId": "PG-13", "Length": "2h13m", "country":"US", "Price":2.99,
+    "Studio": "Warner Bros. Pictures", "Synopsis": "asdf", "Type": 4,
+	"img":"https://imgc.allpostersimages.com/img/print/u-g-F8TKQV0.jpg?w=900&h=900&p=0"},
+	{"movieId": 1, "title": "Fantastic Beasts", "trailerUrl": "https://www.youtube.com/watch?v=TiblmGnet2Q",
+    "releaseDate": "2018-11-16", "mpaaRatingId": "PG-13", "Length": "2h13m", "country":"US", "Price":2.99,
+    "Studio": "Warner Bros. Pictures", "Synopsis": "asdf", "Type": 4,
+	"img":"https://imgc.allpostersimages.com/img/print/u-g-F8TKQV0.jpg?w=900&h=900&p=0"},
+	{"movieId": 1, "title": "Fantastic Beasts", "trailerUrl": "https://www.youtube.com/watch?v=TiblmGnet2Q",
+    "releaseDate": "2018-11-16", "mpaaRatingId": "PG-13", "Length": "2h13m", "country":"US", "Price":2.99,
+    "Studio": "Warner Bros. Pictures", "Synopsis": "asdf", "Type": 4,
+	"img":"https://imgc.allpostersimages.com/img/print/u-g-F8TKQV0.jpg?w=900&h=900&p=0"}
+  ]
+	return render(request, 'movies.html', {'data': data})
+	# return render(request, 'movies.html')
 
 def movieDetail(request):
 	return render(request, 'movieDetail.html')
@@ -69,7 +114,7 @@ def reports(request):
 
 # 	proceeds = allotment * final_share_price
 # 	total_purchase_price = allotment * initial_share_price
-# 	capital_gain = (final_share_price - initial_share_price) * allotment - buy_commission - sell_commission 
+# 	capital_gain = (final_share_price - initial_share_price) * allotment - buy_commission - sell_commission
 # 	tax = capital_gain * tax_rate / 100
 # 	cost = total_purchase_price + buy_commission + sell_commission + tax
 # 	net_profit = proceeds - cost
