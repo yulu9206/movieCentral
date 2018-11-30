@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "livesync",
+    # "livesync",
     "hello",
 ]
 
@@ -52,10 +52,10 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
-
-MIDDLEWARE_CLASSES = (
-    'livesync.core.middleware.DjangoLiveSyncMiddleware',
-)
+#
+# MIDDLEWARE_CLASSES = (
+#     'livesync.core.middleware.DjangoLiveSyncMiddleware',
+# )
 
 ROOT_URLCONF = "gettingstarted.urls"
 
