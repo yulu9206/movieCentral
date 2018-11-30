@@ -2,7 +2,33 @@
 {% load staticfiles %}
 
 {% block movies %}
-
-show movie lists with <a href="/movie-detail">links to movie detail</a>
-
+<!-- with data -->
+<!-- <script type="text/javascript">var data = {{data|safe}}</script> -->
+<section>
+  <div class="container-fluid">
+    <p>show movie lists with <a href="/movie-detail">links to movie detail</a></p>
+    <h1> Movies </h1>
+    <hr></hr>
+    <table id="data" class="table-hover" style="width:100%;">
+      <tr>
+        <th><h4>Movie</h4></th>
+        <th><h4>About</h4></th>
+      </tr>
+      {% for d in data %}
+      <tr>
+        <td width="50%"><img class="center" id="movie" src= " {{ d.img }} " ></img></td>
+        <td width="50%">
+          <p>Title: {{d.title}}</p>
+          <p>Release Date: {{d.releaseDate}}</p>
+          <p>MPAA Rating: {{d.mpaaRatingId}}</p>
+          <p>Length: {{d.Length}}</p>
+          <p>Country: {{d.country}}</p>
+          <p>Studio: {{d.Studio}}</p>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+</section>
+<script src="{% static 'javascript/paging.js' %}"></script>
 {% endblock %}
