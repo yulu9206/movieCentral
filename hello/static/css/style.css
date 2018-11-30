@@ -249,4 +249,24 @@ label.valid {
     margin-left: 0px;
     padding: 0 30px; }
 
+.footer {
+		position: fixed;
+		left: 0;
+		bottom: 0;
+		width: 100%; }
 
+#movie {
+	height: 300px;
+	margin:10px;
+  width: 50%;
+}
+
+#data tr {
+  display: none;
+}
+
+#pag {
+	display: table;
+  margin: 0 auto;
+	font-size: 20px;
+}
