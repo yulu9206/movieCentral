@@ -57,6 +57,8 @@ MIDDLEWARE = [
 #     'livesync.core.middleware.DjangoLiveSyncMiddleware',
 # )
 
+SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+
 ROOT_URLCONF = "gettingstarted.urls"
 
 TEMPLATES = [
