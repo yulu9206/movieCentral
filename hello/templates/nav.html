@@ -31,15 +31,15 @@
       </li>
     </ul>
     <ul class="nav navbar-nav navbar-right">
-    <!-- {% if not user %} -->
+    {% if not session.userId %}
 		<li class="navbar-right">
 			<a href="/login"><span class="glyphicon glyphicon-user"></span> Login/Register(without logging in)</a>
     </li>
-    <!-- {% else %} -->
+    {% else %}
 		<li class="navbar-right">
 			<a href="/customer-detail"><span class="glyphicon glyphicon-user"></span> Profile(after logging in)</a>
     </li>
-    <!-- {% endif %} -->
+    {% endif %}
     </ul>
   </div>
 </nav>
