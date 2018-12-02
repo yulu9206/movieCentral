@@ -1,6 +1,6 @@
 import os
 import json
-# import requests
+import requests
 
 from django.conf import settings
 from django.shortcuts import render
@@ -8,6 +8,8 @@ from django.http import HttpResponse
 from .models import Greeting
 
 api_key = 'Z1P14W088UZ4E700'
+mc_url = 'http://ec2-18-219-67-50.us-east-2.compute.amazonaws.com:8080/dos/api'
+
 
 def index(request):
 	return render(request, 'homepage.html')
@@ -60,13 +62,20 @@ def movies(request):
 	"img":"https://imgc.allpostersimages.com/img/print/u-g-F8TKQV0.jpg?w=900&h=900&p=0"}
   ]
 	return render(request, 'movies.html', {'data': data})
-	# return render(request, 'movies.html')
 
 def movieDetail(request):
 	return render(request, 'movieDetail.html')
 
 def customers(request):
-	return render(request, 'customers.html')
+	url = mc_url + '/user'
+	res = requests.get(url)
+	customers = {}
+	if res.status_code == 200:
+		res_body = json.loads(res.content.decode('utf-8')) 
+		customers = res_body
+	else:
+		customers = {'defaul': 'default'}
+	return render(request, 'customers.html', {'customers': customers})
 
 def customerDetail(request):
 	return render(request, 'customerDetail.html')
