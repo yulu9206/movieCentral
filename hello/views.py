@@ -3,19 +3,49 @@ import json
 import requests
 
 from django.conf import settings
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.contrib import messages
+
 from .models import Greeting
+
 
 api_key = 'Z1P14W088UZ4E700'
 mc_url = 'http://ec2-18-219-67-50.us-east-2.compute.amazonaws.com:8080/dos/api'
+json_headers = dict()
+json_headers['Content-Type'] = 'application/json;charset=UTF-8'
 
+# messages.debug(request, '%s SQL statements were executed.' % count)
+# messages.info(request, 'Three credits remain in your account.')
+# messages.success(request, 'Profile details updated.')
+# messages.warning(request, 'Your account expires in three days.')
+# messages.error(request, 'Document deleted.')
 
 def index(request):
 	return render(request, 'homepage.html')
 
 def login(request):
 	return render(request, 'login.html')
+
+def register(request):
+	req_body = {
+		"email": request.POST.get("email", "yulu9206@gmail.com"),
+		"firstName": request.POST.get("firstName", "defaultFirstName"),
+		"lastName": request.POST.get("lastName", "defaultLastName"),
+		"password": request.POST.get("password", "defaultPassword"),
+		"username": request.POST.get("username", "defaultUsername")
+	}
+	url = mc_url + '/user'
+	req_body = json.dumps(req_body)
+	res = requests.post(url, data=req_body, headers=json_headers)
+	if res.status_code == 201:
+		messages.success(request, 'success')
+		res_body = json.loads(res.content.decode('utf-8')) 
+		request.session['userId'] = res_body['user']['userId'] 
+		return redirect('/') 
+	else:
+		messages.error(request, 'error')
+		return redirect('/login') 
 
 def movies(request):
 	# get-data

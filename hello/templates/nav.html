@@ -31,15 +31,21 @@
       </li>
     </ul>
     <ul class="nav navbar-nav navbar-right">
+    {% if not user %}
 		<li class="navbar-right">
 			<a href="/login"><span class="glyphicon glyphicon-user"></span> Login/Register(without logging in)</a>
-		</li>
+    </li>
+    {% else %}
 		<li class="navbar-right">
 			<a href="/customer-detail"><span class="glyphicon glyphicon-user"></span> Profile(after logging in)</a>
-		</li>
+    </li>
+    {% endif %}
     </ul>
   </div>
 </nav>
+{% for message in messages %}
+<h1 style="background-color: red">{{ message }}</h1>
+{% endfor %}
 
 {% block home %}{% endblock %}
 {% block customers %}{% endblock %}

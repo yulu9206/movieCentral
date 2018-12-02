@@ -3,6 +3,10 @@ import json
 
 mc_url = 'http://ec2-18-219-67-50.us-east-2.compute.amazonaws.com:8080/dos/api'
 
+json_headers = dict()
+json_headers['Content-Type'] = 'application/json;charset=UTF-8'
+
+
 def getCustomers():
 	url = mc_url + '/user'
 	res = requests.get(url)
@@ -15,4 +19,37 @@ def getCustomers():
 	print (customers)
 	return 
 
-getCustomers()
+def register(data):
+	# print (data)
+	try:
+		req_body = {
+			"email": data.email,
+			"firstName": data.firstName,
+			"lastName": data.lastName,
+			"password": data.password,
+			"username": data.username
+		}
+	except:
+		req_body = {
+			"email": "yulu9206@gmail.com",
+			"firstName": "defaultFirstName",
+			"lastName": "defaultLastName",
+			"password": "defaultPassword",
+			"username": "defaultUsername"
+		}
+	url = mc_url + '/user'
+	req_body = json.dumps(req_body)
+	res = requests.post(url, data=req_body, headers=json_headers)
+	res_body = json.loads(res.content.decode('utf-8'))
+	print (res_body)
+	return
+
+# getCustomers()
+data = {
+  "email": "test@email",
+  "firstName": "testF",
+  "lastName": "testL",
+  "password": "testP",
+  "username": "testU"
+}
+register(data)

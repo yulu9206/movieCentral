@@ -22,7 +22,9 @@ urlpatterns = [
     path('movies/', hello.views.movies),
     path('customers/', hello.views.customers),
     path('login/', hello.views.login),
+    path('register/', hello.views.register),
     path('customer-detail/', hello.views.customerDetail),
     path('movie-detail/', hello.views.movieDetail),
     path('reports/', hello.views.reports),
+    # path('reports/', hello.views.reports),
 ]
