@@ -3,9 +3,6 @@
 
 {% block customers %}
 
-<!-- {{customers}} -->
-
-show all customers info with <a href="/customer-detail">links to customer detail</a>
 <div class="container">
 	<table class="table table-striped">
         <thead>
@@ -21,12 +18,12 @@ show all customers info with <a href="/customer-detail">links to customer detail
 				<td>{{customer.username}}</td>
 				<td>{{customer.firstName}}</td>
 				<td>{{customer.lastName}}</td>
-				<td><a href="/customer-detail/{{id}}/edit" type="button" class="btn btn-default btn-warning">
-					Edit
+				<td><a href="/customer/detail/{{customer.userId}}" type="button" class="btn btn-default btn-warning">
+					Detail
 				</a></td>
-				<td><a href="/customer-detail/{{id}}/delete" type="button" class="btn btn-default btn-danger">
+				<td><a href="/customer/delete/{{customer.userId}}" type="button" class="btn btn-default btn-danger">
 					Delete
-				</button></a>
+				</button></a></td>
                  </tr>
         {% endfor %}
 	</table>

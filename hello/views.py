@@ -75,6 +75,38 @@ def logout(request):
 	request.session['user'] = None
 	return redirect('/')
 
+def customers(request):
+	url = mc_url + '/user'
+	res = requests.get(url)
+	if res.status_code == 200:
+		res_body = json.loads(res.content.decode('utf-8')) 
+		customers = res_body['content']
+	else:
+		customers = {'defaul': 'default'}
+	return render(request, 'customers.html', {'customers': customers})
+
+def deleteCustomer(request, userId):
+	url = mc_url + '/user/' + userId
+	# req_body = json.dumps(req_body)
+	res = requests.delete(url, headers=json_headers)
+	res_body = json.loads(res.content.decode('utf-8'))
+	if res.status_code == 200:
+		messages.success(request, res_body['user'])
+	else:
+		messages.error(request, res_body['error'])
+	return redirect('/customers') 
+
+def customerDetail(request, userId):
+	url = mc_url + '/user/' + userId
+	res = requests.get(url)
+	if res.status_code == 200:
+		res_body = json.loads(res.content.decode('utf-8')) 
+		userDetail = res_body['user']
+	else:
+		userDetail = {'defaul': 'default'}
+		messages.error(request, res_body['error'])
+	return render(request, 'customerDetail.html', {'userDetail':userDetail})
+
 def movies(request):
 	# get-data
 	data = [
@@ -123,19 +155,6 @@ def movies(request):
 
 def movieDetail(request):
 	return render(request, 'movieDetail.html')
-
-def customers(request):
-	url = mc_url + '/user'
-	res = requests.get(url)
-	if res.status_code == 200:
-		res_body = json.loads(res.content.decode('utf-8')) 
-		customers = res_body['content']
-	else:
-		customers = {'defaul': 'default'}
-	return render(request, 'customers.html', {'customers': customers})
-
-def customerDetail(request):
-	return render(request, 'customerDetail.html')
 
 def reports(request):
 	return render(request, 'reports.html')
