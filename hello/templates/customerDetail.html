@@ -3,7 +3,65 @@
 
 {% block customerDetail %}
 
-for admin: show customer detail;
-for customer: show personcal account info;
+<div class="container">
+	<div class="row">
+       <div class="col-md-7 ">
+		<div class="panel panel-default">
+  			<div class="panel-heading"> <h4 >User Profile</h4></div>
+   			<div class="panel-body">      
+				<div class="box box-info"> 
+					<div class="box-body">
+						<div class="col-sm-6">
+							<h4 style="color:orange;">{{userDetail.username}} </h4></span>
+							<span><p>User ID: {{userDetail.userId}}</p></span>            
+						</div>
+						<div class="clearfix"></div>
+						<hr style="margin:5px 0 5px 0;">  
 
+						<div class="col-sm-5 col-xs-6 tital " >First Name:</div><div class="col-sm-7 col-xs-6 ">{{userDetail.firstName}}</div>
+							<div class="clearfix"></div>
+						<div class="bot-border"></div>
+
+						<div class="col-sm-5 col-xs-6 tital " >Last Name:</div><div class="col-sm-7"> {{userDetail.lastName}}</div>
+						<div class="clearfix"></div>
+						<div class="bot-border"></div>
+
+						<div class="col-sm-5 col-xs-6 tital " >Street:</div><div class="col-sm-7">{{userDetail.street}}</div>
+
+						<div class="clearfix"></div>
+						<div class="bot-border"></div>
+
+						<div class="col-sm-5 col-xs-6 tital " >City:</div><div class="col-sm-7">{{userDetail.city}}</div>
+
+						<div class="clearfix"></div>
+						<div class="bot-border"></div>
+
+						<div class="col-sm-5 col-xs-6 tital " >State:</div><div class="col-sm-7">{{userDetail.state}}</div>
+
+						<div class="clearfix"></div>
+						<div class="bot-border"></div>
+
+						<div class="col-sm-5 col-xs-6 tital " >Zipcode:</div><div class="col-sm-7">{{userDetail.zipcode}}</div>
+
+						<div class="clearfix"></div>
+						<div class="bot-border"></div>
+
+						<div class="col-sm-5 col-xs-6 tital " >Phone:</div><div class="col-sm-7">{{userDetail.phone}}</div>
+
+						<div class="clearfix"></div>
+						<div class="bot-border"></div>
+
+						<div class="col-sm-5 col-xs-6 tital " >Email:</div><div class="col-sm-7">{{userDetail.email}}</div>
+
+						<div class="clearfix"></div>
+						<div class="bot-border"></div>
+
+						<div class="col-sm-5 col-xs-6 tital " >Subscription Expires:</div><div class="col-sm-7">{{userDetail.subexpiredate}}</div>
+					</div>
+				</div>    
+    		</div> 
+		</div>
+	</div>  
+  </div>
+</div>        
 {% endblock %}

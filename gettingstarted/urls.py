@@ -18,10 +18,16 @@ import hello.views
 
 urlpatterns = [
     url(r'^$', hello.views.index, name='index'),
-    # path('/', hello.views.index, name='index'),
+    url(r'^customer/delete/(?P<userId>\d+)$', hello.views.deleteCustomer),
+    url(r'^customer/detail/(?P<userId>\d+)$', hello.views.customerDetail),
+    url(r'^customer/edit/(?P<userId>\d+)$', hello.views.editCustomer),
+    path('profile/', hello.views.profile),
     path('movies/', hello.views.movies),
     path('customers/', hello.views.customers),
-    path('login/', hello.views.login),
+    path('login/', hello.views.getlogin),
+    path('post-login/', hello.views.login),
+    path('logout/', hello.views.logout),
+    path('register/', hello.views.register),
     path('customer-detail/', hello.views.customerDetail),
     path('movie-detail/', hello.views.movieDetail),
     path('reports/', hello.views.reports),

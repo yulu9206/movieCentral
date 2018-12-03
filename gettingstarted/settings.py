@@ -52,10 +52,19 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+<<<<<<< HEAD
 #
 # MIDDLEWARE_CLASSES = (
 #     'livesync.core.middleware.DjangoLiveSyncMiddleware',
 # )
+=======
+
+# MIDDLEWARE_CLASSES = (
+#     'livesync.core.middleware.DjangoLiveSyncMiddleware',
+# )
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+>>>>>>> 2d2c9f57ed340517c929764d337f9b1c0bd64cda
 
 ROOT_URLCONF = "gettingstarted.urls"
 
