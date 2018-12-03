@@ -1,0 +1,100 @@
+{% extends "nav.html" %}
+{% load staticfiles %}
+
+{% block profile %}
+
+<div class="container">
+	<div class="row">
+       <div class="col-md-7 ">
+		<div class="panel panel-default">
+  			<div class="panel-heading"> <h4 >User Profile</h4></div>
+   			<div class="panel-body">      
+				<div class="box box-info"> 
+					<div class="box-body">
+						<form method="POST" action="/customer/edit/{{user.userId}}">
+						{% csrf_token %}
+						<div class="col-sm-6">Username:
+							<h4 style="color:orange;">
+								<input type="text" name="username" id="username" value="{{user.username}}"/>
+							</h4>
+							<span><p>User ID: {{user.userId}}</p></span>            
+						</div>
+						<div class="clearfix"></div>
+						<hr style="margin:5px 0 5px 0;">  
+
+						<div class="col-sm-5 col-xs-6 tital " >Password:</div>
+						<div class="col-sm-7 col-xs-6 ">
+							<input type="password" name="password" id="password" value="{{user.password}}"/>
+						</div>
+						<div class="clearfix"></div>
+						<div class="bot-border"></div>
+
+						<div class="col-sm-5 col-xs-6 tital " >First Name:</div>
+						<div class="col-sm-7 col-xs-6 ">
+							<input type="text" name="firstName" id="firstName" value="{{user.firstName}}"/>
+						</div>
+						<div class="clearfix"></div>
+						<div class="bot-border"></div>
+
+						<div class="col-sm-5 col-xs-6 tital " >Last Name:</div>
+						<div class="col-sm-7 col-xs-6 ">
+							<input type="text" name="lastName" id="lastName" value="{{user.lastName}}"/>
+						</div>
+						<div class="clearfix"></div>
+						<div class="bot-border"></div>
+
+						<div class="col-sm-5 col-xs-6 tital " >Street:</div>
+						<div class="col-sm-7 col-xs-6 ">
+							<input type="text" name="street" id="street" value="{{user.street}}"/>
+						</div>
+						<div class="clearfix"></div>
+						<div class="bot-border"></div>
+
+						<div class="col-sm-5 col-xs-6 tital " >City:</div>
+						<div class="col-sm-7 col-xs-6 ">
+							<input type="text" name="city" id="city" value="{{user.city}}"/>
+						</div>
+						<div class="clearfix"></div>
+						<div class="bot-border"></div>
+
+						<div class="col-sm-5 col-xs-6 tital " >State:</div>
+						<div class="col-sm-7 col-xs-6 ">
+							<input type="text" name="state" id="state" value="{{user.state}}"/>
+						</div>
+						<div class="clearfix"></div>
+						<div class="bot-border"></div>
+
+						<div class="col-sm-5 col-xs-6 tital " >Zipcode:</div>
+						<div class="col-sm-7 col-xs-6 ">
+							<input type="text" name="zipcode" id="zipcode" value="{{user.zipcode}}"/>
+						</div>
+						<div class="clearfix"></div>
+						<div class="bot-border"></div>
+
+						<div class="col-sm-5 col-xs-6 tital " >Phone:</div>
+						<div class="col-sm-7 col-xs-6 ">
+							<input type="text" name="phone" id="phone" value="{{user.phone}}"/>
+						</div>
+						<div class="clearfix"></div>
+						<div class="bot-border"></div>
+
+						<div class="col-sm-5 col-xs-6 tital " >Email:</div>
+						<div class="col-sm-7 col-xs-6 ">
+							<input type="text" name="email" id="email" value="{{user.email}}"/>
+						</div>
+						<div class="clearfix"></div>
+						<div class="bot-border"></div>
+
+						<div class="col-sm-5 col-xs-6 tital " >Subscription Expires:</div><div class="col-sm-7">{{userDetail.subexpiredate}}</div>
+						<div class="form-group">
+							<input type="submit" class="form-submit" value="Update"/>
+						</div>
+						</form>
+					</div>
+				</div>    
+    		</div> 
+		</div>
+	</div>  
+  </div>
+</div>        
+{% endblock %}

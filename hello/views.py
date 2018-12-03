@@ -31,6 +31,42 @@ def index(request):
         data = {}
     return render(request, 'homepage.html', data)
 
+def profile(request):
+    try:
+        this_user = request.session['user']
+        data = {
+        'user': this_user
+        }
+    except:
+        data = {}
+    return render(request, 'profile.html', data)
+
+def editCustomer(request, userId):
+	req_body = {
+		"email": request.POST.get("email", "yulu9206@gmail.com"),
+		"firstName": request.POST.get("firstName", "defaultFirstName"),
+		"lastName": request.POST.get("lastName", "defaultLastName"),
+		"password": request.POST.get("password", "defaultPassword"),
+		"username": request.POST.get("username", "defaultUsername"),
+		"city": request.POST.get("city", "defaultcity"),
+		"phone": request.POST.get("phone", "defaultphone"),
+		"state": request.POST.get("state", "defaultstate"),
+		"street": request.POST.get("street", "defaultstreet"),
+		"zipcode": request.POST.get("zipcode", "defaultzipcode")
+	}
+
+	url = mc_url + '/user/' + userId
+	req_body = json.dumps(req_body)
+	print (req_body)
+	res = requests.put(url, data=req_body, headers=json_headers)
+	res_body = json.loads(res.content.decode('utf-8'))
+	if res.status_code == 200:
+		messages.success(request, 'Updated')
+		request.session['user'] = res_body['user']
+	else:
+		messages.error(request, res_body['error'])
+	return redirect('/profile') 
+
 def getlogin(request):
 	return render(request, 'login.html')
 

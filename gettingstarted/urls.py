@@ -20,6 +20,8 @@ urlpatterns = [
     url(r'^$', hello.views.index, name='index'),
     url(r'^customer/delete/(?P<userId>\d+)$', hello.views.deleteCustomer),
     url(r'^customer/detail/(?P<userId>\d+)$', hello.views.customerDetail),
+    url(r'^customer/edit/(?P<userId>\d+)$', hello.views.editCustomer),
+    path('profile/', hello.views.profile),
     path('movies/', hello.views.movies),
     path('customers/', hello.views.customers),
     path('login/', hello.views.getlogin),
