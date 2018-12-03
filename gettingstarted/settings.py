@@ -58,7 +58,6 @@ MIDDLEWARE = [
 # )
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
->>>>>>> 2d2c9f57ed340517c929764d337f9b1c0bd64cda
 
 ROOT_URLCONF = "gettingstarted.urls"
 
