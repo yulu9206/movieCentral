@@ -22,9 +22,16 @@ json_headers['Content-Type'] = 'application/json;charset=UTF-8'
 # messages.error(request, 'Document deleted.')
 
 def index(request):
-	return render(request, 'homepage.html')
+    try:
+        this_user = request.session['user']
+        data = {
+        'user': this_user
+        }
+    except:
+        data = {}
+    return render(request, 'homepage.html', data)
 
-def login(request):
+def getlogin(request):
 	return render(request, 'login.html')
 
 def register(request):
@@ -41,11 +48,32 @@ def register(request):
 	if res.status_code == 201:
 		messages.success(request, 'success')
 		res_body = json.loads(res.content.decode('utf-8')) 
-		request.session['userId'] = res_body['user']['userId'] 
+		request.session['user'] = res_body['user']
 		return redirect('/') 
 	else:
 		messages.error(request, 'error')
 		return redirect('/login') 
+
+def login(request):
+	req_body = {
+		"password": request.POST.get("password", "defaultPassword"),
+		"username": request.POST.get("username", "defaultUsername")
+	}
+	url = mc_url + '/login'
+	req_body = json.dumps(req_body)
+	res = requests.post(url, data=req_body, headers=json_headers)
+	if res.status_code == 200:
+		messages.success(request, 'success')
+		res_body = json.loads(res.content.decode('utf-8')) 
+		request.session['user'] = res_body['user']
+		return redirect('/') 
+	else:
+		messages.error(request, 'error')
+		return redirect('/login') 
+
+def logout(request):
+	request.session['user'] = None
+	return redirect('/')
 
 def movies(request):
 	# get-data
