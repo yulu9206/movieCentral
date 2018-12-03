@@ -127,10 +127,9 @@ def movieDetail(request):
 def customers(request):
 	url = mc_url + '/user'
 	res = requests.get(url)
-	customers = {}
 	if res.status_code == 200:
 		res_body = json.loads(res.content.decode('utf-8')) 
-		customers = res_body
+		customers = res_body['content']
 	else:
 		customers = {'defaul': 'default'}
 	return render(request, 'customers.html', {'customers': customers})
