@@ -52,12 +52,6 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
-<<<<<<< HEAD
-#
-# MIDDLEWARE_CLASSES = (
-#     'livesync.core.middleware.DjangoLiveSyncMiddleware',
-# )
-=======
 
 # MIDDLEWARE_CLASSES = (
 #     'livesync.core.middleware.DjangoLiveSyncMiddleware',
