@@ -1,9 +1,9 @@
 .jumbotron {
-	background: black;
+	background:white;
 	background-image: url(../img/home3.jpg);
 	/* color: white; */
 	padding-bottom: 80px;
-	height: 800px;
+	height: 900px;
 }
 .jumbotron .btn-primary {
 	background: orange;
