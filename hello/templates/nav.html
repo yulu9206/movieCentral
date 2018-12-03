@@ -18,16 +18,15 @@
       </li>
       {% if user %}
       <li>
-        <a href="/movies"><span class="glyphicon glyphicon-film"></span> Movies(after logging in)</a>
+        <a href="/movies"><span class="glyphicon glyphicon-film"></span> Movies</a>
       </li>
       <li>
-        <a href="/customers"><span class="glyphicon glyphicon-info-sign"></span> Customers(admin)</a>
+        <a href="/customers"><span class="glyphicon glyphicon-info-sign"></span> Customers</a>
       </li>
       <li class="dropdown">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-briefcase"></span> Reports(admin) <span class="caret"></span></a>
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-briefcase"></span> Reports <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
             <li><a href="/reports">Revenue</a></li>
-            <!-- <li><a href="hw2">HW: Python Finance Info</a></li> -->
           </ul>
       </li>
       {% endif %}
@@ -48,9 +47,16 @@
     </ul>
   </div>
 </nav>
-{% for message in messages %}
-<h1 style="background-color: red">{{ message }}</h1>
-{% endfor %}
+
+{% if messages %}
+<div class="container">
+  <div id="msgbox" class="alert alert-info" role="alert">
+    {% for message in messages %}
+    <p>{{ message }}</p>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
 
 {% block home %}{% endblock %}
 {% block customers %}{% endblock %}

@@ -45,13 +45,13 @@ def register(request):
 	url = mc_url + '/user'
 	req_body = json.dumps(req_body)
 	res = requests.post(url, data=req_body, headers=json_headers)
+	res_body = json.loads(res.content.decode('utf-8'))
 	if res.status_code == 201:
-		messages.success(request, 'success')
-		res_body = json.loads(res.content.decode('utf-8')) 
+		# messages.success(request, 'success')
 		request.session['user'] = res_body['user']
 		return redirect('/') 
 	else:
-		messages.error(request, 'error')
+		messages.error(request, res_body['error'])
 		return redirect('/login') 
 
 def login(request):
@@ -62,13 +62,13 @@ def login(request):
 	url = mc_url + '/login'
 	req_body = json.dumps(req_body)
 	res = requests.post(url, data=req_body, headers=json_headers)
+	res_body = json.loads(res.content.decode('utf-8'))
 	if res.status_code == 200:
-		messages.success(request, 'success')
-		res_body = json.loads(res.content.decode('utf-8')) 
+		# messages.success(request, 'success')
 		request.session['user'] = res_body['user']
 		return redirect('/') 
 	else:
-		messages.error(request, 'error')
+		messages.error(request, res_body['error'])
 		return redirect('/login') 
 
 def logout(request):
