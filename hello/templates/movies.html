@@ -10,29 +10,30 @@
     <hr></hr>
     <table id="data" class="table-hover" style="width:100%; border-collapse:separate; border-spacing: 0 1em;">
       <tr>
-        <th><h4>Movie</h4></th>
-        <th><h4>About</h4></th>
+        <th><h3>Movie</h3></th>
+        <th><h3>About</h3></th>
       </tr>
-      {% for d in data.content %}
-      <tr>
-        <td width="50%">
-          <img src="{{ d.coverImageUrl }}" height="80%"></img>
-        </td>
-        <td width="50%">
-          <p>Title: {{d.movieTitle}}</p>
-          <p>Release Date: {{d.releaseDate}}</p>
-          <p>MPAA Rating: {{d.mpaaRating}}</p>
-          <p>Country: {{d.country}}</p>
-          <p>Studio: {{d.studio}}</p>
-          <p>User Rating: {{d.stars}}</p>
-          <p>Description: {{d.movieDesc}}</p>
-        </td>
-      </tr>
+      {% for d in data %}
+        <tr>
+          <td width="50%">
+            <img src="{{ d.coverImageUrl }}" height="80%"></img>
+          </td>
+          <td width="50%">
+            <p>Title: {{d.movieTitle}}</p>
+            <p>Genre:  {{d.genre}} </p>
+            <p>Release Date: {{d.releaseDate}}</p>
+            <p>MPAA Rating: {{d.mpaaRating}}</p>
+            <p>Country: {{d.country}}</p>
+            <p>Studio: {{d.studio}}</p>
+            <p>User Rating: {{d.stars}}</p>
+            <p>Description: {{d.movieDesc}}</p>
+          </td>
+        </tr>
       {% endfor %}
     </table>
+    <div class="container-fluid" id="pag"></div>
   </div>
   <hr></hr>
-  <div class="container-fluid" id="pag"></div>
 </section>
 <script src="{% static 'javascript/paging.js' %}"></script>
 {% endblock %}

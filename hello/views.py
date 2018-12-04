@@ -164,10 +164,18 @@ def customerDetail(request, userId):
 
 def movies(request):
 	# get-data
-	url = mc_url + '/movies'
-	res = requests.get(url).json()
-	data = res["content"]
-	return render(request, 'movies.html', {"data": res})
+	url1 = mc_url + '/movies'
+	url2 = mc_url + '/movie-genre/'
+	res1 = requests.get(url1).json()
+	data = res1['content']
+	for i in range(len(data)):
+		res2 = requests.get(url2 + str(data[i]['movieId'])).json()
+		temp = res2['genres']
+		if len(temp) >= 1:
+			data[i]['genre'] = temp[0]['genreName']
+		else:
+			data[i]['genre'] = ""
+	return render(request, 'movies.html', {"data": data})
 
 def movieDetail(request):
 	return render(request, 'movieDetail.html')
