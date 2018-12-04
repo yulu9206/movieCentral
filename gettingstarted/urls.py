@@ -22,7 +22,7 @@ urlpatterns = [
     path('logout/', hello.views.logout),
     path('register/', hello.views.register),
     path('customer-detail/', hello.views.customerDetail),
-    path('movie-detail/', hello.views.movieDetail),
+    url('movie-detail/(?P<movieId>\d+)$', hello.views.movieDetail),
     path('reports/', hello.views.reports),
     url(r'^activate/(?P<uid>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})$',
         hello.views.activate, name='activate'),
