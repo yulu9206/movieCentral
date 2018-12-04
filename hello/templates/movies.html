@@ -2,8 +2,7 @@
 {% load staticfiles %}
 
 {% block movies %}
-<!-- with data -->
-<!-- <script type="text/javascript">var data = {{data|safe}}</script> -->
+
 <section>
   <div class="container-fluid">
     <h1> Movies </h1>
@@ -17,9 +16,11 @@
       {% for d in data %}
         <tr>
           <td align="center" width="20%">
-            <a href='/movie-detail/{{ d.movieId }}'>
-              <img src="{{ d.coverImageUrl }}" height="80%"></img>
-            </a>
+            <div class="poster">
+              <a href='/movie-detail/{{ d.movieId }}'>
+                <img class="img-responsive" src="{{ d.coverImageUrl }}" ></img>
+              </a>
+            </div>
           </td>
           <td width="30%"></td>
           <td width="50%">
@@ -41,14 +42,5 @@
   </div>
   <hr></hr>
 </section>
-<!-- <script>
-  function playVideo(url) {
-    var win = window.open("","","width=700,height=400,left=300,top=300");
-    var style='<link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />';
-    var src = style + '<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" id="a" src="'
-       + url + '" allowfullscreen></iframe></div>'
-    win.document.write(src);
-  } -->
-</script>
 <script src="{% static 'javascript/paging.js' %}"></script>
 {% endblock %}
