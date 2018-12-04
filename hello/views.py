@@ -14,6 +14,23 @@ from .tokens import account_activation_token
 from django.core.mail import EmailMessage
 
 from .models import Greeting, TempUser
+from .models import Greeting
+
+LOGGING = {
+    'version': 1,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'stream': sys.stdout,
+        }
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO'
+    }
+}
+
+logging.config.dictConfig(LOGGING)
 
 api_key = 'Z1P14W088UZ4E700'
 mc_url = 'http://ec2-18-219-67-50.us-east-2.compute.amazonaws.com:8080/dos/api'
