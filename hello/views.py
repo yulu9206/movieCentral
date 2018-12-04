@@ -94,7 +94,8 @@ def register(request):
 		"firstName": request.POST.get("firstName", "defaultFirstName"),
 		"lastName": request.POST.get("lastName", "defaultLastName"),
 		"password": request.POST.get("password", "defaultPassword"),
-		"username": request.POST.get("username", "defaultUsername")
+		"username": request.POST.get("username", "defaultUsername"),
+		"role": request.POST.get("role", "1")
 	}
 	url = mc_url + '/user'
 	req_body = json.dumps(req_body)

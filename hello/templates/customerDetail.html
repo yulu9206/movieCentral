@@ -13,10 +13,16 @@
 					<div class="box-body">
 						<div class="col-sm-6">
 							<h4 style="color:orange;">{{userDetail.username}} </h4></span>
-							<span><p>User ID: {{userDetail.userId}}</p></span>            
+							{% if userDetail.role is 2%}
+							<span><p style="color:orange;">Admin</p></span>
+							{% endif %}            
 						</div>
 						<div class="clearfix"></div>
 						<hr style="margin:5px 0 5px 0;">  
+
+						<div class="col-sm-5 col-xs-6 tital " >User ID:</div><div class="col-sm-7 col-xs-6 ">{{userDetail.userId}}</div>
+							<div class="clearfix"></div>
+						<div class="bot-border"></div>
 
 						<div class="col-sm-5 col-xs-6 tital " >First Name:</div><div class="col-sm-7 col-xs-6 ">{{userDetail.firstName}}</div>
 							<div class="clearfix"></div>
