@@ -1,6 +1,5 @@
 $(document).ready(function(){
-    $('#data').after('<div id="pag"></div>');
-    var rowsShown = 4;
+    var rowsShown = 5;
     var rowsTotal = $('#data tbody tr').length;
     var numPages = rowsTotal/rowsShown;
     for(i = 0;i < numPages;i++) {

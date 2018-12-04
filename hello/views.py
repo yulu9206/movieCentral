@@ -1,6 +1,8 @@
 import os
 import json
 import requests
+import logging, logging.config
+import sys
 
 from django.conf import settings
 from django.shortcuts import render, redirect
@@ -12,6 +14,23 @@ from .tokens import account_activation_token
 from django.core.mail import EmailMessage
 
 from .models import Greeting, TempUser
+from .models import Greeting
+
+LOGGING = {
+    'version': 1,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'stream': sys.stdout,
+        }
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO'
+    }
+}
+
+logging.config.dictConfig(LOGGING)
 
 api_key = 'Z1P14W088UZ4E700'
 mc_url = 'http://ec2-18-219-67-50.us-east-2.compute.amazonaws.com:8080/dos/api'
@@ -70,7 +89,7 @@ def activate(request, uid, token):
 			"password": user.password,
 			"username": user.username,
 			"role": user.role
-		}	
+		}
 		url = mc_url + '/user'
 		req_body = json.dumps(req_body)
 		res = requests.post(url, data=req_body, headers=json_headers)
@@ -126,7 +145,7 @@ def editCustomer(request, userId):
 		request.session['user'] = res_body['user']
 	else:
 		messages.error(request, res_body['error'])
-	return redirect('/profile') 
+	return redirect('/profile')
 
 def getlogin(request):
 	return render(request, 'login.html')
@@ -142,10 +161,10 @@ def login(request):
 	res_body = json.loads(res.content.decode('utf-8'))
 	if res.status_code == 200:
 		request.session['user'] = res_body['user']
-		return redirect('/') 
+		return redirect('/')
 	else:
 		messages.error(request, res_body['error'])
-		return redirect('/login') 
+		return redirect('/login')
 
 def logout(request):
 	request.session['user'] = None
@@ -155,7 +174,7 @@ def customers(request):
 	url = mc_url + '/user'
 	res = requests.get(url)
 	if res.status_code == 200:
-		res_body = json.loads(res.content.decode('utf-8')) 
+		res_body = json.loads(res.content.decode('utf-8'))
 		customers = res_body['content']
 	else:
 		customers = {'defaul': 'default'}
@@ -169,13 +188,13 @@ def deleteCustomer(request, userId):
 		messages.success(request, res_body['user'])
 	else:
 		messages.error(request, res_body['error'])
-	return redirect('/customers') 
+	return redirect('/customers')
 
 def customerDetail(request, userId):
 	url = mc_url + '/user/' + userId
 	res = requests.get(url)
 	if res.status_code == 200:
-		res_body = json.loads(res.content.decode('utf-8')) 
+		res_body = json.loads(res.content.decode('utf-8'))
 		userDetail = res_body['user']
 	else:
 		userDetail = {'defaul': 'default'}
@@ -184,49 +203,18 @@ def customerDetail(request, userId):
 
 def movies(request):
 	# get-data
-	data = [
-    {"movieId": 1, "title": "Fantastic Beasts", "trailerUrl": "https://www.youtube.com/watch?v=TiblmGnet2Q",
-    "releaseDate": "2018-11-16", "mpaaRatingId": "PG-13", "Length": "2h13m", "country":"US", "Price":2.99,
-    "Studio": "Warner Bros. Pictures", "Synopsis": "asdf", "Type": 4,
-	"img":"https://imgc.allpostersimages.com/img/print/u-g-F8TKQV0.jpg?w=900&h=900&p=0"},
-    {"movieId": 1, "title": "Fantastic Beasts", "trailerUrl": "https://www.youtube.com/watch?v=TiblmGnet2Q",
-    "releaseDate": "2018-11-16", "mpaaRatingId": "PG-13", "Length": "2h13m", "country":"US", "Price":2.99,
-    "Studio": "Warner Bros. Pictures", "Synopsis": "asdf", "Type": 4,
-	"img":"https://imgc.allpostersimages.com/img/print/u-g-F8TKQV0.jpg?w=900&h=900&p=0"},
-    {"movieId": 1, "title": "Fantastic Beasts", "trailerUrl": "https://www.youtube.com/watch?v=TiblmGnet2Q",
-    "releaseDate": "2018-11-16", "mpaaRatingId": "PG-13", "Length": "2h13m", "country":"US", "Price":2.99,
-    "Studio": "Warner Bros. Pictures", "Synopsis": "asdf", "Type": 4,
-	"img":"https://imgc.allpostersimages.com/img/print/u-g-F8TKQV0.jpg?w=900&h=900&p=0"},
-	{"movieId": 1, "title": "Fantastic Beasts", "trailerUrl": "https://www.youtube.com/watch?v=TiblmGnet2Q",
-    "releaseDate": "2018-11-16", "mpaaRatingId": "PG-13", "Length": "2h13m", "country":"US", "Price":2.99,
-    "Studio": "Warner Bros. Pictures", "Synopsis": "asdf", "Type": 4,
-	"img":"https://imgc.allpostersimages.com/img/print/u-g-F8TKQV0.jpg?w=900&h=900&p=0"},
-	{"movieId": 1, "title": "Fantastic Beasts", "trailerUrl": "https://www.youtube.com/watch?v=TiblmGnet2Q",
-    "releaseDate": "2018-11-16", "mpaaRatingId": "PG-13", "Length": "2h13m", "country":"US", "Price":2.99,
-    "Studio": "Warner Bros. Pictures", "Synopsis": "asdf", "Type": 4,
-	"img":"https://imgc.allpostersimages.com/img/print/u-g-F8TKQV0.jpg?w=900&h=900&p=0"},
-	{"movieId": 1, "title": "Fantastic Beasts", "trailerUrl": "https://www.youtube.com/watch?v=TiblmGnet2Q",
-    "releaseDate": "2018-11-16", "mpaaRatingId": "PG-13", "Length": "2h13m", "country":"US", "Price":2.99,
-    "Studio": "Warner Bros. Pictures", "Synopsis": "asdf", "Type": 4,
-	"img":"https://imgc.allpostersimages.com/img/print/u-g-F8TKQV0.jpg?w=900&h=900&p=0"},
-	{"movieId": 1, "title": "Fantastic Beasts", "trailerUrl": "https://www.youtube.com/watch?v=TiblmGnet2Q",
-    "releaseDate": "2018-11-16", "mpaaRatingId": "PG-13", "Length": "2h13m", "country":"US", "Price":2.99,
-    "Studio": "Warner Bros. Pictures", "Synopsis": "asdf", "Type": 4,
-	"img":"https://imgc.allpostersimages.com/img/print/u-g-F8TKQV0.jpg?w=900&h=900&p=0"},
-	{"movieId": 1, "title": "Fantastic Beasts", "trailerUrl": "https://www.youtube.com/watch?v=TiblmGnet2Q",
-    "releaseDate": "2018-11-16", "mpaaRatingId": "PG-13", "Length": "2h13m", "country":"US", "Price":2.99,
-    "Studio": "Warner Bros. Pictures", "Synopsis": "asdf", "Type": 4,
-	"img":"https://imgc.allpostersimages.com/img/print/u-g-F8TKQV0.jpg?w=900&h=900&p=0"},
-	{"movieId": 1, "title": "Fantastic Beasts", "trailerUrl": "https://www.youtube.com/watch?v=TiblmGnet2Q",
-    "releaseDate": "2018-11-16", "mpaaRatingId": "PG-13", "Length": "2h13m", "country":"US", "Price":2.99,
-    "Studio": "Warner Bros. Pictures", "Synopsis": "asdf", "Type": 4,
-	"img":"https://imgc.allpostersimages.com/img/print/u-g-F8TKQV0.jpg?w=900&h=900&p=0"},
-	{"movieId": 1, "title": "Fantastic Beasts", "trailerUrl": "https://www.youtube.com/watch?v=TiblmGnet2Q",
-    "releaseDate": "2018-11-16", "mpaaRatingId": "PG-13", "Length": "2h13m", "country":"US", "Price":2.99,
-    "Studio": "Warner Bros. Pictures", "Synopsis": "asdf", "Type": 4,
-	"img":"https://imgc.allpostersimages.com/img/print/u-g-F8TKQV0.jpg?w=900&h=900&p=0"}
-  ]
-	return render(request, 'movies.html', {'data': data})
+	url1 = mc_url + '/movies'
+	url2 = mc_url + '/movie-genre/'
+	res1 = requests.get(url1).json()
+	data = res1['content']
+	for i in range(len(data)):
+		res2 = requests.get(url2 + str(data[i]['movieId'])).json()
+		temp = res2['genres']
+		if len(temp) >= 1:
+			data[i]['genre'] = temp[0]['genreName']
+		else:
+			data[i]['genre'] = ""
+	return render(request, 'movies.html', {"data": data})
 
 def movieDetail(request):
 	return render(request, 'movieDetail.html')
