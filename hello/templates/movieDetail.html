@@ -3,6 +3,17 @@
 
 {% block movieDetail %}
 
-show movie detail with editting enabled for admin
+<section>
+  <div class="container-fluid">
+    <div class="text-center">
+      <h1> {{ data.movieTitle }} </h1>
+    </div>
+    <hr></hr>
+    <div class="row embed-responsive embed-responsive-16by9" style= "margin-left:50px;margin-right:50px;">
+      <iframe class="embed-responsive-item" src="{{ data.trailerUrl }}" allowfullscreen></iframe>
+    </div>
+  </div>
+  <hr></hr>
+</section>
 
 {% endblock %}

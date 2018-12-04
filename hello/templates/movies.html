@@ -2,22 +2,27 @@
 {% load staticfiles %}
 
 {% block movies %}
-<!-- with data -->
-<!-- <script type="text/javascript">var data = {{data|safe}}</script> -->
+
 <section>
   <div class="container-fluid">
     <h1> Movies </h1>
     <hr></hr>
-    <table id="data" class="table-hover" style="width:100%; border-collapse:separate; border-spacing: 0 1em;">
+    <table id="data" class="table-hover" style="width:100%; border-collapse:separate; border-spacing: 0 1.5em;">
       <tr>
-        <th><h3>Movie</h3></th>
+        <th class="text-center"><h3>Movie</h3></th>
+        <th></th>
         <th><h3>About</h3></th>
       </tr>
       {% for d in data %}
         <tr>
-          <td width="50%">
-            <img src="{{ d.coverImageUrl }}" height="80%"></img>
+          <td align="center" width="20%">
+            <div class="poster">
+              <a href='/movie-detail/{{ d.movieId }}'>
+                <img class="img-responsive" src="{{ d.coverImageUrl }}" ></img>
+              </a>
+            </div>
           </td>
+          <td width="30%"></td>
           <td width="50%">
             <p>Title: {{d.movieTitle}}</p>
             <p>Genre:  {{d.genre}} </p>
@@ -25,6 +30,8 @@
             <p>MPAA Rating: {{d.mpaaRating}}</p>
             <p>Country: {{d.country}}</p>
             <p>Studio: {{d.studio}}</p>
+            <p>Director: </p>
+            <p>Casts: </p>
             <p>User Rating: {{d.stars}}</p>
             <p>Description: {{d.movieDesc}}</p>
           </td>
