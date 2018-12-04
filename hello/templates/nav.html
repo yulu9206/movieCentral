@@ -3,13 +3,26 @@
 {% load static %}
 <head>
 <title>Movie Central</title>
-<!-- <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script> -->
 <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+<!-- Initialize Firebase -->
+<script src="https://www.gstatic.com/firebasejs/5.6.0/firebase.js"></script>
+<script>
+  var config = {
+    apiKey: "AIzaSyAqdonpxFQ625kouug5fS3ZXI0AnlBNMao",
+    authDomain: "moviecentral-b3123.firebaseapp.com",
+    databaseURL: "https://moviecentral-b3123.firebaseio.com",
+    projectId: "moviecentral-b3123",
+    storageBucket: "moviecentral-b3123.appspot.com",
+    messagingSenderId: "779082618185"
+  };
+  firebase.initializeApp(config);
+
+</script>
+<script src="https://cdn.firebase.com/libs/firebaseui/3.1.1/firebaseui.js"></script>
+<link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.1.1/firebaseui.css" />
 </head>
 
 <body>
@@ -69,6 +82,7 @@
 {% block login %}{% endblock %}
 {% block reports %}{% endblock %}
 {% block profile %}{% endblock %}
+{% block signup %}{% endblock %}
 
 <div class="footer">© 2018 Copyright:
   <a href="https://sleepy-shore-81319.herokuapp.com/"> MovieCentral</a>
