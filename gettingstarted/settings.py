@@ -123,4 +123,11 @@ USE_TZ = True
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = "/static/"
 
+# email setting
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'moviecentral.2018@gmail.com'
+EMAIL_HOST_PASSWORD = 'mc123456!'
+EMAIL_PORT = 587
+
 django_heroku.settings(locals())

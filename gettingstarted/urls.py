@@ -8,13 +8,6 @@ admin.autodiscover()
 
 import hello.views
 
-# To add a new path, first import the app:
-# import blog
-#
-# Then add the new path:
-# path('blog/', blog.urls, name="blog")
-#
-# Learn more here: https://docs.djangoproject.com/en/2.1/topics/http/urls/
 
 urlpatterns = [
     url(r'^$', hello.views.index, name='index'),
@@ -31,4 +24,6 @@ urlpatterns = [
     path('customer-detail/', hello.views.customerDetail),
     path('movie-detail/', hello.views.movieDetail),
     path('reports/', hello.views.reports),
+    url(r'^activate/(?P<uid>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})$',
+        hello.views.activate, name='activate'),
 ]

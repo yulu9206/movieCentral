@@ -8,25 +8,12 @@ from django.conf import settings
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib import messages
+from django.contrib.sites.shortcuts import get_current_site
+from django.template.loader import render_to_string
+from .tokens import account_activation_token
+from django.core.mail import EmailMessage
 
-from .models import Greeting
-
-LOGGING = {
-    'version': 1,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-            'stream': sys.stdout,
-        }
-    },
-    'root': {
-        'handlers': ['console'],
-        'level': 'INFO'
-    }
-}
-
-logging.config.dictConfig(LOGGING)
-
+from .models import Greeting, TempUser
 
 api_key = 'Z1P14W088UZ4E700'
 mc_url = 'http://ec2-18-219-67-50.us-east-2.compute.amazonaws.com:8080/dos/api'
@@ -38,6 +25,65 @@ json_headers['Content-Type'] = 'application/json;charset=UTF-8'
 # messages.success(request, 'Profile details updated.')
 # messages.warning(request, 'Your account expires in three days.')
 # messages.error(request, 'Document deleted.')
+
+def register(request):
+	if request.method == 'POST':
+		data = {
+			"email": request.POST.get("email", "yulu9206@gmail.com"),
+			"firstName": request.POST.get("firstName", "defaultFirstName"),
+			"lastName": request.POST.get("lastName", "defaultLastName"),
+			"password": request.POST.get("password", "defaultPassword"),
+			"username": request.POST.get("username", "defaultUsername"),
+			"role": request.POST.get("role", 1),
+		}
+		tempUser = TempUser(email=data['email'], firstName=data['firstName'], lastName=data['lastName'], password=data['password'], username=data['username'], role=data['role'])
+		tempUser.save()
+		current_site = get_current_site(request)
+		mail_subject = 'Activate your movieCentral account.'
+		message = render_to_string('acc_active_email.html', {
+			'user': tempUser,
+			'domain': current_site.domain,
+			'uid':tempUser.pk,
+			'token':account_activation_token.make_token(tempUser),
+		})
+		to_email = request.POST.get('email')
+		email = EmailMessage(
+					mail_subject, message, to=[to_email]
+		)
+		email.send()
+		return HttpResponse('Please confirm your email address to complete the registration')
+	else:
+		form = SignupForm()
+	return render(request, 'signup.html', {'form': form})
+
+def activate(request, uid, token):
+	try:
+		uid = uid
+		user = TempUser.objects.get(pk=uid)
+	except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+		user = None
+	if user is not None and account_activation_token.check_token(user, token):
+		user.isActivate = True
+		user.save()
+		req_body = {
+			"email": user.email,
+			"firstName": user.firstName,
+			"lastName": user.lastName,
+			"password": user.password,
+			"username": user.username,
+			"role": user.role
+		}
+		url = mc_url + '/user'
+		req_body = json.dumps(req_body)
+		res = requests.post(url, data=req_body, headers=json_headers)
+		res_body = json.loads(res.content.decode('utf-8'))
+		if res.status_code == 201:
+			messages.success(request, 'Thank you for your email confirmation. Now you can log in your account.')
+		else:
+			messages.error(request, res_body['error'])
+	else:
+		messages.error(request, 'Activation link is invalid!')
+	return redirect('/login')
 
 def index(request):
     try:
@@ -75,7 +121,6 @@ def editCustomer(request, userId):
 
 	url = mc_url + '/user/' + userId
 	req_body = json.dumps(req_body)
-	print (req_body)
 	res = requests.put(url, data=req_body, headers=json_headers)
 	res_body = json.loads(res.content.decode('utf-8'))
 	if res.status_code == 200:
@@ -88,27 +133,6 @@ def editCustomer(request, userId):
 def getlogin(request):
 	return render(request, 'login.html')
 
-def register(request):
-	req_body = {
-		"email": request.POST.get("email", "yulu9206@gmail.com"),
-		"firstName": request.POST.get("firstName", "defaultFirstName"),
-		"lastName": request.POST.get("lastName", "defaultLastName"),
-		"password": request.POST.get("password", "defaultPassword"),
-		"username": request.POST.get("username", "defaultUsername"),
-		"role": request.POST.get("role", "1")
-	}
-	url = mc_url + '/user'
-	req_body = json.dumps(req_body)
-	res = requests.post(url, data=req_body, headers=json_headers)
-	res_body = json.loads(res.content.decode('utf-8'))
-	if res.status_code == 201:
-		# messages.success(request, 'success')
-		request.session['user'] = res_body['user']
-		return redirect('/')
-	else:
-		messages.error(request, res_body['error'])
-		return redirect('/login')
-
 def login(request):
 	req_body = {
 		"password": request.POST.get("password", "defaultPassword"),
@@ -119,7 +143,6 @@ def login(request):
 	res = requests.post(url, data=req_body, headers=json_headers)
 	res_body = json.loads(res.content.decode('utf-8'))
 	if res.status_code == 200:
-		# messages.success(request, 'success')
 		request.session['user'] = res_body['user']
 		return redirect('/')
 	else:
@@ -142,7 +165,6 @@ def customers(request):
 
 def deleteCustomer(request, userId):
 	url = mc_url + '/user/' + userId
-	# req_body = json.dumps(req_body)
 	res = requests.delete(url, headers=json_headers)
 	res_body = json.loads(res.content.decode('utf-8'))
 	if res.status_code == 200:
@@ -188,83 +210,3 @@ def reports(request):
 # 	greeting.save()
 # 	greetings = Greeting.objects.all()
 # 	return render(request, 'db.html', {'greetings': greetings})
-
-# def hw1Web(request):
-# 	results = {
-# 		'symbol': '',
-# 		'proceeds': 0,
-# 		'cost': 0,
-# 		'net_profit': 0,
-# 		'return_on_invest': 0,
-# 		'break_even_price': 0
-# 	}
-# 	return render(request, 'hw1.html', {'results': results})
-
-# def calculate(request):
-# 	postData = {
-# 	'symbol': request.POST.get('symbol', "default symbol"),
-# 	'allotment': request.POST.get('allotment', "default allotment"),
-# 	'final_share': request.POST.get('final_share', "default final_share"),
-# 	'sell_commission': request.POST.get('sell_commission', "default sell_commission"),
-# 	'initial_share': request.POST.get('initial_share', "default initial_share"),
-# 	'buy_commission': request.POST.get('buy_commission', "default buy_commission"),
-# 	'tax_rate': request.POST.get('tax_rate', "default tax_rate"),
-# 	}
-# 	results = profitCalculate(postData)
-# 	return render(request, 'hw1.html', {'results': results})
-
-# def profitCalculate(postData):
-# 	allotment = float(postData['allotment'])
-# 	final_share_price = float(postData['final_share'])
-# 	sell_commission = float(postData['sell_commission'])
-# 	initial_share_price = float(postData['initial_share'])
-# 	buy_commission = float(postData['buy_commission'])
-# 	tax_rate = float(postData['tax_rate'])
-
-# 	proceeds = allotment * final_share_price
-# 	total_purchase_price = allotment * initial_share_price
-# 	capital_gain = (final_share_price - initial_share_price) * allotment - buy_commission - sell_commission
-# 	tax = capital_gain * tax_rate / 100
-# 	cost = total_purchase_price + buy_commission + sell_commission + tax
-# 	net_profit = proceeds - cost
-# 	return_on_investment = net_profit / cost * 100
-# 	break_even_price = (total_purchase_price + buy_commission + sell_commission) / allotment
-
-# 	results = {
-# 	'symbol': postData['symbol'],
-# 	'proceeds': proceeds,
-# 	'cost': cost,
-# 	'net_profit': net_profit,
-# 	'return_on_investment': return_on_investment,
-# 	'break_even_price': break_even_price
-# 	}
-# 	return results
-
-# def hw2(request):
-# 	results = {
-# 		'symbol': '',
-# 		'proceeds': 0,
-# 		'cost': 0,
-# 		'net_profit': 0,
-# 		'return_on_invest': 0,
-# 		'break_even_price': 0
-# 	}
-# 	return render(request, 'hw2.html', {'results': results})
-
-# def getFinanceInfo(request):
-# 	postData = {
-# 		'symbol': request.POST.get('symbol', "default symbol"),
-# 		'allotment': request.POST.get('allotment', "default allotment"),
-# 		'final_share': request.POST.get('final_share', "default final_share"),
-# 		'sell_commission': request.POST.get('sell_commission', "default sell_commission"),
-# 		'initial_share': request.POST.get('initial_share', "default initial_share"),
-# 		'buy_commission': request.POST.get('buy_commission', "default buy_commission"),
-# 		'tax_rate': request.POST.get('tax_rate', "default tax_rate"),
-# 	}
-# 	results = callFinanceService(postData)
-# 	return render(request, 'hw2.html', {'results': results})
-
-# def callFinanceService(postData):
-# 	data = requests.get('http://alphavantage.co/query?function=apiKey={}'.format(api_key))
-# 	results = data.json()
-# 	return results
