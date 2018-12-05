@@ -225,6 +225,7 @@ def movieDetail(request, movieId):
 	url = mc_url + '/movie/' + movieId
 	res = requests.get(url).json()
 	data = res['movie']
+	logging.info(data)
 	return render(request, 'movieDetail.html', {"data": data});
 
 def reports(request):
