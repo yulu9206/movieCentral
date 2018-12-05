@@ -8,8 +8,8 @@
        <div class="col-md-7 ">
 		<div class="panel panel-default">
   			<div class="panel-heading"> <h4 >User Profile</h4></div>
-   			<div class="panel-body">      
-				<div class="box box-info"> 
+   			<div class="panel-body">
+				<div class="box box-info">
 					<div class="box-body">
 						<form method="POST" action="/customer/edit/{{user.userId}}">
 						{% csrf_token %}
@@ -17,10 +17,10 @@
 							<h4 style="color:orange;">
 								<input type="text" name="username" id="username" value="{{user.username}}"/>
 							</h4>
-							<span><p>User ID: {{user.userId}}</p></span>            
+							<span><p>User ID: {{user.userId}}</p></span>
 						</div>
 						<div class="clearfix"></div>
-						<hr style="margin:5px 0 5px 0;">  
+						<hr style="margin:5px 0 5px 0;">
 
 						<div class="col-sm-5 col-xs-6 tital " >Password:</div>
 						<div class="col-sm-7 col-xs-6 ">
@@ -91,10 +91,102 @@
 						</div>
 						</form>
 					</div>
-				</div>    
-    		</div> 
+				</div>
+    		</div>
 		</div>
-	</div>  
+	</div>
+	{% if 'sjsu.edu' in user.email %}
+		<div class="col-md-5">
+			<div class="panel panel-default">
+	  			<div class="panel-heading"> <h4 >Add Movie</h4></div>
+	   			<div class="panel-body">
+					<div class="box box-info">
+						<div class="box-body">
+							<form method="POST" action="/addmovie/">
+							{% csrf_token %}
+							<div class="clearfix"></div>
+							<hr style="margin:5px 0 5px 0;">
+
+							<div class="col-sm-5 col-xs-6 tital ">country</div>
+							<div class="col-sm-7 col-xs-6 ">
+								<input type="text" name="country" id="country"/>
+							</div>
+							<div class="clearfix"></div>
+							<div class="bot-border"></div>
+
+							<div class="col-sm-5 col-xs-6 tital ">coverImageUrl</div>
+							<div class="col-sm-7 col-xs-6 ">
+								<input type="text" name="coverImageUrl" id="coverImageUrl"/>
+							</div>
+							<div class="clearfix"></div>
+							<div class="bot-border"></div>
+
+							<div class="col-sm-5 col-xs-6 tital ">length</div>
+							<div class="col-sm-7 col-xs-6 ">
+								<input type="text" name="length" id="length"/>
+							</div>
+							<div class="clearfix"></div>
+							<div class="bot-border"></div>
+
+							<div class="col-sm-5 col-xs-6 tital ">movieDesc</div>
+							<div class="col-sm-7 col-xs-6 ">
+								<input type="text" name="movieDesc" id="movieDesc"/>
+							</div>
+							<div class="clearfix"></div>
+							<div class="bot-border"></div>
+
+							<div class="col-sm-5 col-xs-6 tital ">movieTitle</div>
+							<div class="col-sm-7 col-xs-6 ">
+								<input type="text" name="movieTitle" id="movieTitle"/>
+							</div>
+							<div class="clearfix"></div>
+							<div class="bot-border"></div>
+
+							<div class="col-sm-5 col-xs-6 tital ">movie_type</div>
+							<div class="col-sm-7 col-xs-6 ">
+								<input type="text" name="movie_type" id="movie_type"/>
+							</div>
+							<div class="clearfix"></div>
+							<div class="bot-border"></div>
+
+							<div class="col-sm-5 col-xs-6 tital ">mpaaRating</div>
+							<div class="col-sm-7 col-xs-6 ">
+								<input type="text" name="mpaaRating" id="mpaaRating"/>
+							</div>
+							<div class="clearfix"></div>
+							<div class="bot-border"></div>
+
+							<div class="col-sm-5 col-xs-6 tital ">releaseDate</div>
+							<div class="col-sm-7 col-xs-6 ">
+								<input type="text" name="releaseDate" id="releaseDate"/>
+							</div>
+							<div class="clearfix"></div>
+							<div class="bot-border"></div>
+
+							<div class="col-sm-5 col-xs-6 tital ">studio</div>
+							<div class="col-sm-7 col-xs-6 ">
+								<input type="text" name="studio" id="studio"/>
+							</div>
+							<div class="clearfix"></div>
+							<div class="bot-border"></div>
+
+							<div class="col-sm-5 col-xs-6 tital ">trailerUrl</div>
+							<div class="col-sm-7 col-xs-6 ">
+								<input type="text" name="trailerUrl" id="trailerUrl"/>
+							</div>
+							<div class="clearfix"></div>
+							<div class="bot-border"></div>
+
+							<div class="form-group">
+								<input type="submit" class="form-submit" value="Submit"/>
+							</div>
+							</form>
+						</div>
+					</div>
+	    		</div>
+			</div>
+		</div>
+	{% endif %}
   </div>
-</div>        
+</div>
 {% endblock %}
