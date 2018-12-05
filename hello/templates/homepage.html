@@ -9,7 +9,9 @@
       <img src="{% static 'img/logo.png'%}">
     </a>
     <p>Watch anywhere anytime.</p>
-	  <a type="button" class="btn btn-lg btn-primary" href="/login"><span class="glyphicon glyphicon-flash"></span> Start Free Trial</a>
+    {% if not user %}
+    <a type="button" class="btn btn-lg btn-primary" href="/login"><span class="glyphicon glyphicon-flash"></span> Start Free Trial</a>
+    {% endif %}
   </div>
      
     <!--<a type="button" class="btn btn-lg btn-default" href="https://devcenter.heroku.com/articles/getting-started-with-python"><span class="glyphicon glyphicon-flash"></span> Getting Started with Python</a>
