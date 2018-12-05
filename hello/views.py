@@ -152,6 +152,29 @@ def editCustomer(request, userId):
         messages.error(request, res_body['error'])
     return redirect('/profile')
 
+def addMovie(request):
+    req_body = {
+        "country": request.POST.get('country', 'defaultCountry'),
+        "coverImageUrl": request.POST.get('coverImageUrl', 'defaultUrl'),
+        "length": request.POST.get('length', 'defaultLength'),
+        "movieDesc": request.POST.get('movieDesc', 'defaultDesc'),
+        "movieTitle": request.POST.get('movieTitle', 'defaultTitle'),
+        "movie_type": request.POST.get('movie_type', 1),
+        "mpaaId": request.POST.get('movieDesc', 1),
+        "releaseDate": request.POST.get('releaseDate', '2018-12-05'),
+        "studio": request.POST.get('studio', 'defaultStudio'),
+        "trailerUrl": request.POST.get('trailerUrl', 'defaultUrl'), 
+    }
+    url = mc_url + '/movie'
+    req_body = json.dumps(req_body)
+    res = requests.post(url, data=req_body, headers=json_headers)
+    res_body = json.loads(res.content.decode('utf-8'))
+    if res.status_code == 201:
+        messages.success(request, 'The Movie is created!')
+    else:
+        messages.error(request, res_body['error'])
+    return redirect('/movies')
+
 def getlogin(request):
     try:
         this_user = request.session['user']

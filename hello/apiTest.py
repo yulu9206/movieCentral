@@ -56,6 +56,30 @@ def login(data):
 	else:
 		messages.error(request, 'error')
 		return redirect('/login')
+
+def addMovie(req_body):
+    # req_body = {
+    #     "country": request.POST.get('country', 'defaultCountry'),
+    #     "coverImageUrl": request.POST.get('coverImageUrl', 'defaultUrl'),
+    #     "length": request.POST.get('length', 'defaultLength'),
+    #     "movieDesc": request.POST.get('movieDesc', 'defaultDesc'),
+    #     "movieTitle": request.POST.get('movieTitle', 'defaultTitle'),
+    #     "movie_type": request.POST.get('movie_type', 1),
+    #     "mpaaId": request.POST.get('movieDesc', 1),
+    #     "releaseDate": request.POST.get('releaseDate', '2018-12-05'),
+    #     "studio": request.POST.get('studio', 'defaultStudio'),
+    #     "trailerUrl": request.POST.get('trailerUrl', 'defaultUrl'), 
+    # }
+    url = mc_url + '/movie'
+    req_body = json.dumps(req_body)
+    res = requests.post(url, data=req_body, headers=json_headers)
+    res_body = json.loads(res.content.decode('utf-8'))
+    if res.status_code == 201:
+        print('The Movie is created!')
+    else:
+        print('error')
+    return 
+
 # getCustomers()
 # registerData = {
 #   "email": "test@email",
@@ -66,9 +90,24 @@ def login(data):
 # }
 # register(registerData)
 
-loginData = {
-  "password": "1111",
-  "username": "testu7"
+# loginData = {
+#   "password": "1111",
+#   "username": "testu7"
+# }
+
+# login(loginData)
+
+newMovie = {
+  "country": "string",
+  "coverImageUrl": "string",
+  "length": 0,
+  "movieDesc": "string",
+  "movieTitle": "string",
+  "movie_type": 1,
+  "mpaaId": 1,
+  "releaseDate": "2018-12-05",
+  "studio": "string",
+  "trailerUrl": "string"
 }
 
-login(loginData)
+addMovie(newMovie)
