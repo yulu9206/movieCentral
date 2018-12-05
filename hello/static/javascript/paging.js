@@ -1,5 +1,5 @@
 $(document).ready(function(){
-    var rowsShown = 5;
+    var rowsShown = 2;
     var rowsTotal = $('#data tbody tr').length;
     var numPages = rowsTotal/rowsShown;
     for(i = 0;i < numPages;i++) {

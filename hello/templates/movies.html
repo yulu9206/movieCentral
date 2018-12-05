@@ -2,19 +2,23 @@
 {% load staticfiles %}
 
 {% block movies %}
-
 <section>
   <div class="container-fluid">
     <h1> Movies </h1>
-    <hr></hr>
+  </div>
+  <hr></hr>
+  <div class="container-fluid">
+    <div class="input-group">
+      <div class="input-group-addon">Name</div>
+      <input type="text" class="form-control" id="myInput" onkeyup="myFunction()" placeholder="Search for names..">
+    </div>
+  </div>
+  <div class="container-fluid">
     <table id="data" class="table-hover" style="width:100%; border-collapse:separate; border-spacing: 0 1.5em;">
-      <tr>
-        <th class="text-center"><h3>Movie</h3></th>
-        <th></th>
-        <th><h3>About</h3></th>
-      </tr>
       {% for d in data %}
-        <tr>
+        {% if forloop.counter|add:"-1"|divisibleby:3 %}
+          <tr>
+        {% endif %}
           <td align="center" width="20%">
             <div class="poster">
               <a href='/movie-detail/{{ d.movieId }}'>
@@ -22,20 +26,9 @@
               </a>
             </div>
           </td>
-          <td width="30%"></td>
-          <td width="50%">
-            <p>Title: {{d.movieTitle}}</p>
-            <p>Genre:  {{d.genre}} </p>
-            <p>Release Date: {{d.releaseDate}}</p>
-            <p>MPAA Rating: {{d.mpaaRating}}</p>
-            <p>Country: {{d.country}}</p>
-            <p>Studio: {{d.studio}}</p>
-            <p>Director: </p>
-            <p>Casts: </p>
-            <p>User Rating: {{d.stars}}</p>
-            <p>Description: {{d.movieDesc}}</p>
-          </td>
-        </tr>
+        {% if forloop.counter|divisibleby:3 %}
+          </tr>
+        {% endif %}
       {% endfor %}
     </table>
     <div class="container-fluid" id="pag"></div>

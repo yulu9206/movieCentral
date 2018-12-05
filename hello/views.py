@@ -203,6 +203,9 @@ def customerDetail(request, userId):
 
 def movies(request):
 	# get-data
+	if not request.session['user']:
+		return redirect('/')
+	# logging.info(request.session['user'])
 	url1 = mc_url + '/movies'
 	url2 = mc_url + '/movie-genre/'
 	res1 = requests.get(url1).json()
@@ -217,6 +220,8 @@ def movies(request):
 	return render(request, 'movies.html', {"data": data})
 
 def movieDetail(request, movieId):
+	if not request.session['user']:
+		return redirect('/')
 	url = mc_url + '/movie/' + movieId
 	res = requests.get(url).json()
 	data = res['movie']
