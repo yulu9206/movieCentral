@@ -2,45 +2,82 @@
 {% load staticfiles %}
 
 {% block movies %}
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
 <section>
   <div class="container-fluid">
     <h1> Movies </h1>
-    <hr></hr>
-    <table id="data" class="table-hover" style="width:100%; border-collapse:separate; border-spacing: 0 1.5em;">
-      <tr>
-        <th class="text-center"><h3>Movie</h3></th>
-        <th></th>
-        <th><h3>About</h3></th>
-      </tr>
+  </div>
+  <hr></hr>
+  <div class="container-fluid">
+    <div class="input-group">
+      <div class="search-container input-group-addon">Name</div>
+      <input type="text" class="form-control search" id="myInput" onkeyup="myFunction()" placeholder="Search for names..">
+    </div>
+  </div>
+  <div class="container-fluid">
+    <ul id="data" class="list-unstyled" style="width:100%; border-collapse:separate; border-spacing: 0 1.5em;">
       {% for d in data %}
-        <tr>
-          <td align="center" width="20%">
-            <div class="poster">
-              <a href='/movie-detail/{{ d.movieId }}'>
-                <img class="img-responsive" src="{{ d.coverImageUrl }}" ></img>
-              </a>
+          <li>
+            <div class="row">
+              <div class="col-lg-1 col-md-1 col-sm-1"></div>
+              <div class="poster col-lg-2 col-md-2 col-sm-2">
+                <a href='/movie-detail/{{ d.movieId }}'>
+                  <img class="img-responsive" src="{{ d.coverImageUrl }}" height="10%"  ></img>
+                  <h4 id='title'> {{d.movieTitle}}</h4>
+                </a>
+              </div>
+              <div class="col-lg-2 col-md-2 col-sm-2"></div>
+              <div class="col-lg-6 col-md-6 col-sm-6">
+                <p id="genre">Genre: {{d.genre}}</p>
+                <p id="date">Release Date: {{d.releaseDate}}</p>
+                <p>MPAA Rating: {{d.mpaaRating}}</p>
+                <p>Length: {{d.length}} minutes</p>
+                <p>Director: {% for da in d.directors %}da, {% endfor %}</p>
+                <p>Director: {% for da in d.characters %}da, {% endfor %}</p>
+                <p>Review: {{d.stars}} stars</p>
+                <p>Description: {{d.movieDesc}}</p>
+              </div>
+              <div class="col-lg-1 col-md-1 col-sm-1"></div>
             </div>
-          </td>
-          <td width="30%"></td>
-          <td width="50%">
-            <p>Title: {{d.movieTitle}}</p>
-            <p>Genre:  {{d.genre}} </p>
-            <p>Release Date: {{d.releaseDate}}</p>
-            <p>MPAA Rating: {{d.mpaaRating}}</p>
-            <p>Country: {{d.country}}</p>
-            <p>Studio: {{d.studio}}</p>
-            <p>Director: </p>
-            <p>Casts: </p>
-            <p>User Rating: {{d.stars}}</p>
-            <p>Description: {{d.movieDesc}}</p>
-          </td>
-        </tr>
+          </li>
       {% endfor %}
-    </table>
+    </ul>
     <div class="container-fluid" id="pag"></div>
   </div>
   <hr></hr>
 </section>
 <script src="{% static 'javascript/paging.js' %}"></script>
+<script>
+  pag('#data','#pag',false);
+</script>
+<script>
+function myFunction() {
+  // Declare variables
+  var input, filter, ul, li, a, i, txtValue;
+  input = document.getElementById('myInput');
+  filter = input.value.toUpperCase();
+  ul = document.getElementById("data");
+  li = ul.getElementsByTagName('li');
+  for (i = 0; i < li.length; i++) {
+    li[i].id = "";
+  }
+  if( input.value.length == "" ) {
+    pag('#data','#pag',false);
+  }
+  else {
+    for (i = 0; i < li.length; i++) {
+        h4 = li[i].getElementsByTagName("h4")[0];
+        txtValue = h4.textContent || h4.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            li[i].id = "target";
+        } else {
+            li[i].id = "";
+        }
+    }
+    pag('#data','#pag',true);
+  }
+}
+</script>
+
 {% endblock %}
