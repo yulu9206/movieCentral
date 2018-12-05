@@ -236,6 +236,10 @@ def movieDetail(request, movieId):
     data = res['movie']
     return render(request, 'movieDetail.html', {"data": data});
 
+def addMovie(request):
+    
+    return redirect('/profile')
+
 def reports(request):
     return render(request, 'reports.html')
 
