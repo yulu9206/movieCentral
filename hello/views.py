@@ -216,33 +216,6 @@ def customerDetail(request, userId):
     return render(request, 'customerDetail.html', {'userDetail':userDetail})
 
 def movies(request):
-<<<<<<< HEAD
-	# get-data
-	if not request.session['user']:
-		return redirect('/')
-	# logging.info(request.session['user'])
-	url1 = mc_url + '/movies'
-	url2 = mc_url + '/movie-genre/'
-	res1 = requests.get(url1).json()
-	data = res1['content']
-	for i in range(len(data)):
-		res2 = requests.get(url2 + str(data[i]['movieId'])).json()
-		temp = res2['genres']
-		if len(temp) >= 1:
-			data[i]['genre'] = temp[0]['genreName']
-		else:
-			data[i]['genre'] = ""
-	return render(request, 'movies.html', {"data": data})
-
-def movieDetail(request, movieId):
-	if not request.session['user']:
-		return redirect('/')
-	url = mc_url + '/movie/' + movieId
-	res = requests.get(url).json()
-	data = res['movie']
-	logging.info(data)
-	return render(request, 'movieDetail.html', {"data": data});
-=======
     # get-data
     url1 = mc_url + '/movies'
     url2 = mc_url + '/movie-genre/'
@@ -262,7 +235,6 @@ def movieDetail(request, movieId):
     res = requests.get(url).json()
     data = res['movie']
     return render(request, 'movieDetail.html', {"data": data});
->>>>>>> 9967c8714f231857f1ed4966973159d903f9112d
 
 def reports(request):
     return render(request, 'reports.html')
