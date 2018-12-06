@@ -17,7 +17,9 @@
 							<h4 style="color:orange;">
 								<input type="text" name="username" id="username" value="{{user.username}}"/>
 							</h4>
-							<span><p>User ID: {{user.userId}}</p></span>
+							{% if user.role is 2 %}
+							<span><p style="color:orange;">Admin</p></span>
+							{% endif %} 
 						</div>
 						<div class="clearfix"></div>
 						<hr style="margin:5px 0 5px 0;">
