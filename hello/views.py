@@ -300,7 +300,10 @@ def movieDetail(request, movieId):
     if data['movie_type'] != 1:
         if user['subexpiredate']:
             return render(request, 'movieDetail.html', {"data": data});
-    return redirect('/sub/')
+        else:
+            return redirect('/sub/')
+    else:
+        return render(request, 'movieDetail.html', {"data": data});
 
 def reports(request):
     return render(request, 'reports.html')
