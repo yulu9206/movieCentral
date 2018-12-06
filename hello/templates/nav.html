@@ -36,6 +36,7 @@
       <li>
         <a href="/movies"><span class="glyphicon glyphicon-film"></span> Movies</a>
       </li>
+      {% if user.role is 2 %}
       <li>
         <a href="/customers"><span class="glyphicon glyphicon-info-sign"></span> Customers</a>
       </li>
@@ -45,6 +46,7 @@
             <li><a href="/reports">Revenue</a></li>
           </ul>
       </li>
+      {% endif %}
       {% endif %}
     </ul>
     <ul class="nav navbar-nav navbar-right">
