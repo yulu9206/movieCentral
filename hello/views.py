@@ -152,6 +152,31 @@ def editCustomer(request, userId):
         messages.error(request, res_body['error'])
     return redirect('/profile')
 
+def sub(request):
+    try:
+        this_user = request.session['user']
+    except:
+        messages.error(request, 'Please log in first!')
+        return redirect('/login')
+    cardNumber = request.POST.get('cardNumber')
+    if not cardNumber:
+        messages.error(request, 'Please fill in a valid card number!')
+        return redirect('/sub')
+    req_body = {
+        "cardNumber": request.POST.get('cardNumber', 'defaultCardNumber'),
+        "subexpiredate": "2019-01"
+    }
+    userId = this_user['userId']
+    url = mc_url + '/user/' + userId
+    req_body = json.dumps(req_body)
+    res = requests.put(url, data=req_body, headers=json_headers)
+    res_body = json.loads(res.content.decode('utf-8'))
+    if res.status_code == 200:
+        messages.success(request, 'Thank you for subscribing!')
+    else:
+        messages.error(request, res_body['error'])
+    return redirect('/profile')
+
 def addMovie(request):
     req_body = {
         "country": request.POST.get('country', 'defaultCountry'),
