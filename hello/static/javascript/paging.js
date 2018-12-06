@@ -1,6 +1,6 @@
 function pag(listId, pagId, target){
     $(pagId).empty();
-    var rowsShown = 4;
+    var rowsShown = 5;
     if (!target) {
       $('#target').id=" ";
       var rowsTotal = $(listId +' li').length;
