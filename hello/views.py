@@ -153,29 +153,34 @@ def editCustomer(request, userId):
     return redirect('/profile')
 
 def sub(request):
-    try:
-        this_user = request.session['user']
-    except:
-        messages.error(request, 'Please log in first!')
-        return redirect('/login')
-    cardNumber = request.POST.get('cardNumber')
-    if not cardNumber:
-        messages.error(request, 'Please fill in a valid card number!')
-        return redirect('/sub')
-    req_body = {
-        "cardNumber": request.POST.get('cardNumber', 'defaultCardNumber'),
-        "subexpiredate": "2019-01"
-    }
-    userId = this_user['userId']
-    url = mc_url + '/user/' + userId
-    req_body = json.dumps(req_body)
-    res = requests.put(url, data=req_body, headers=json_headers)
-    res_body = json.loads(res.content.decode('utf-8'))
-    if res.status_code == 200:
-        messages.success(request, 'Thank you for subscribing!')
-    else:
-        messages.error(request, res_body['error'])
-    return redirect('/profile')
+    if request.method == 'GET':
+        return render(request, 'subscribe.html')
+
+    if request.method == 'POST':
+        try:
+            this_user = request.session['user']
+        except:
+            messages.error(request, 'Please log in first!')
+            return redirect('/login')
+        cardNumber = request.POST.get('cardNumber')
+        if not cardNumber:
+            messages.error(request, 'Please fill in a valid card number!')
+            return redirect('/sub')
+        req_body = {
+            "subexpiredate": "2019-01"
+        }
+        userId = this_user['userId']
+        url = mc_url + '/user/' + str(userId)
+        req_body = json.dumps(req_body)
+        res = requests.put(url, data=req_body, headers=json_headers)
+        res_body = json.loads(res.content.decode('utf-8'))
+        if res.status_code == 200:
+            request.session['user']['subexpiredate'] = "2019-01"
+            messages.success(request, 'Thank you for subscribing!')
+        else:
+            messages.error(request, res_body['error'])
+        user = request.session['user']
+        return redirect('/profile')
 
 def addMovie(request):
     req_body = {
@@ -188,7 +193,7 @@ def addMovie(request):
         "mpaaId": request.POST.get('movieDesc', 1),
         "releaseDate": request.POST.get('releaseDate', '2018-12-05'),
         "studio": request.POST.get('studio', 'defaultStudio'),
-        "trailerUrl": request.POST.get('trailerUrl', 'defaultUrl'), 
+        "trailerUrl": request.POST.get('trailerUrl', 'defaultUrl'),
     }
     url = mc_url + '/movie'
     req_body = json.dumps(req_body)
@@ -280,10 +285,20 @@ def movies(request):
     return render(request, 'movies.html', {"data": data})
 
 def movieDetail(request, movieId):
+
     url = mc_url + '/movie/' + movieId
+    url2 = mc_url + '/user/' + str(request.session['user']['userId'])
     res = requests.get(url).json()
+    res2 = requests.get(url2).json()
     data = res['movie']
-    return render(request, 'movieDetail.html', {"data": data});
+    user = res2['user']
+    logging.info(data)
+    logging.info(user)
+
+    if data['movie_type'] != 1:
+        if user['subexpiredate']:
+            return render(request, 'movieDetail.html', {"data": data});
+    return redirect('/sub/')
 
 def reports(request):
     return render(request, 'reports.html')
