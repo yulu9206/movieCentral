@@ -119,9 +119,11 @@ def index(request):
 
 def profile(request):
     try:
-        this_user = request.session['user']
+        url2 = mc_url + '/user/' + str(request.session['user']['userId'])
+        res2 = requests.get(url2).json()
+        user = res2['user']
         data = {
-        'user': this_user
+            'user': user
         }
     except:
         data = {}
