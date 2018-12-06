@@ -169,6 +169,7 @@ def addMovie(request):
     req_body = json.dumps(req_body)
     res = requests.post(url, data=req_body, headers=json_headers)
     res_body = json.loads(res.content.decode('utf-8'))
+    print (res_body)
     if res.status_code == 201:
         messages.success(request, 'The Movie is created!')
     else:
@@ -258,10 +259,6 @@ def movieDetail(request, movieId):
     res = requests.get(url).json()
     data = res['movie']
     return render(request, 'movieDetail.html', {"data": data});
-
-def addMovie(request):
-    
-    return redirect('/profile')
 
 def reports(request):
     return render(request, 'reports.html')
