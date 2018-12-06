@@ -5,7 +5,7 @@
 
 <div class="container">
 	<div class="row">
-       <div class="col-md-7 ">
+       <div class="col-md-5 ">
 		<div class="panel panel-default">
   			<div class="panel-heading"> <h4 >User Profile</h4></div>
    			<div class="panel-body">
@@ -98,7 +98,7 @@
 		</div>
 	</div>
 	{% if 'sjsu.edu' in user.email %}
-		<div class="col-md-5">
+		<div class="col-md-7">
 			<div class="panel panel-default">
 	  			<div class="panel-heading"> <h4 >Add Movie</h4></div>
 	   			<div class="panel-body">
@@ -108,71 +108,78 @@
 							{% csrf_token %}
 							<div class="clearfix"></div>
 							<hr style="margin:5px 0 5px 0;">
-
-							<div class="col-sm-5 col-xs-6 tital ">country</div>
-							<div class="col-sm-7 col-xs-6 ">
-								<input type="text" name="country" id="country"/>
-							</div>
-							<div class="clearfix"></div>
-							<div class="bot-border"></div>
-
-							<div class="col-sm-5 col-xs-6 tital ">coverImageUrl</div>
-							<div class="col-sm-7 col-xs-6 ">
-								<input type="text" name="coverImageUrl" id="coverImageUrl"/>
-							</div>
-							<div class="clearfix"></div>
-							<div class="bot-border"></div>
-
-							<div class="col-sm-5 col-xs-6 tital ">length</div>
-							<div class="col-sm-7 col-xs-6 ">
-								<input type="text" name="length" id="length"/>
-							</div>
-							<div class="clearfix"></div>
-							<div class="bot-border"></div>
-
-							<div class="col-sm-5 col-xs-6 tital ">movieDesc</div>
-							<div class="col-sm-7 col-xs-6 ">
-								<input type="text" name="movieDesc" id="movieDesc"/>
-							</div>
-							<div class="clearfix"></div>
-							<div class="bot-border"></div>
-
-							<div class="col-sm-5 col-xs-6 tital ">movieTitle</div>
+							
+							<div class="col-sm-5 col-xs-6 tital ">Movie Title</div>
 							<div class="col-sm-7 col-xs-6 ">
 								<input type="text" name="movieTitle" id="movieTitle"/>
 							</div>
 							<div class="clearfix"></div>
 							<div class="bot-border"></div>
 
-							<div class="col-sm-5 col-xs-6 tital ">movie_type</div>
+							<div class="col-sm-5 col-xs-6 tital ">Movie Type</div>
 							<div class="col-sm-7 col-xs-6 ">
-								<input type="text" name="movie_type" id="movie_type"/>
+								<input type="radio" name="movie_type" id="movie_type" value="1"/>Free to All<br>
+								<input type="radio" name="movie_type" id="movie_type" value="2"/>Subscription Only<br>
+								<input type="radio" name="movie_type" id="movie_type" value="3"/>Pay Per View<br>
+								<input type="radio" name="movie_type" id="movie_type" value="4"/>Paid<br>
 							</div>
 							<div class="clearfix"></div>
 							<div class="bot-border"></div>
 
-							<div class="col-sm-5 col-xs-6 tital ">mpaaRating</div>
+							<div class="col-sm-5 col-xs-6 tital ">Country</div>
 							<div class="col-sm-7 col-xs-6 ">
-								<input type="text" name="mpaaRating" id="mpaaRating"/>
+								<input type="text" name="country" id="country"/>
 							</div>
 							<div class="clearfix"></div>
 							<div class="bot-border"></div>
 
-							<div class="col-sm-5 col-xs-6 tital ">releaseDate</div>
+							<div class="col-sm-5 col-xs-6 tital ">Cover Image Url</div>
+							<div class="col-sm-7 col-xs-6 ">
+								<input type="text" name="coverImageUrl" id="coverImageUrl"/>
+							</div>
+							<div class="clearfix"></div>
+							<div class="bot-border"></div>
+
+							<div class="col-sm-5 col-xs-6 tital ">Length</div>
+							<div class="col-sm-7 col-xs-6 ">
+								<input type="text" name="length" id="length"/>
+							</div>
+							<div class="clearfix"></div>
+							<div class="bot-border"></div>
+
+							<div class="col-sm-5 col-xs-6 tital ">Movie Description</div>
+							<div class="col-sm-7 col-xs-6 ">
+								<input type="text" name="movieDesc" id="movieDesc"/>
+							</div>
+							<div class="clearfix"></div>
+							<div class="bot-border"></div>
+
+							<div class="col-sm-5 col-xs-6 tital ">MPAA Rating</div>
+							<div class="col-sm-7 col-xs-6 ">
+								<input type="radio" name="mpaaRating" id="mpaaRating" value="1"/>G<br>
+								<input type="radio" name="mpaaRating" id="mpaaRating" value="2"/>PG<br>
+								<input type="radio" name="mpaaRating" id="mpaaRating" value="3"/>PG-13<br>
+								<input type="radio" name="mpaaRating" id="mpaaRating" value="4"/>R<br>
+								<input type="radio" name="mpaaRating" id="mpaaRating" value="5"/>NC-17<br>
+							</div>
+							<div class="clearfix"></div>
+							<div class="bot-border"></div>
+
+							<div class="col-sm-5 col-xs-6 tital ">Release Date</div>
 							<div class="col-sm-7 col-xs-6 ">
 								<input type="text" name="releaseDate" id="releaseDate"/>
 							</div>
 							<div class="clearfix"></div>
 							<div class="bot-border"></div>
 
-							<div class="col-sm-5 col-xs-6 tital ">studio</div>
+							<div class="col-sm-5 col-xs-6 tital ">Studio</div>
 							<div class="col-sm-7 col-xs-6 ">
 								<input type="text" name="studio" id="studio"/>
 							</div>
 							<div class="clearfix"></div>
 							<div class="bot-border"></div>
 
-							<div class="col-sm-5 col-xs-6 tital ">trailerUrl</div>
+							<div class="col-sm-5 col-xs-6 tital ">Trailer Url</div>
 							<div class="col-sm-7 col-xs-6 ">
 								<input type="text" name="trailerUrl" id="trailerUrl"/>
 							</div>
