@@ -36,11 +36,21 @@
       <li>
         <a href="/movies"><span class="glyphicon glyphicon-film"></span> Movies</a>
       </li>
+<<<<<<< HEAD
       {% if user.role is not 2%}
         <li>
           <a href="/sub/"><span class="glyphicon glyphicon-credit-card"></span> Subscribe</a>
         </li>
       {% endif %}
+=======
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-star"></span> Top Ten <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="/toptenrating">Top Ten Rating</a></li>
+            <li><a href="/toptenwatching">Top Ten Watching </a></li>
+          </ul>
+      </li>
+>>>>>>> 17943094fe0a57cfcf52d392ea3dd7780d98a597
       {% if user.role is 2 %}
       <li>
         <a href="/customers"><span class="glyphicon glyphicon-info-sign"></span> Customers</a>
