@@ -25,6 +25,7 @@ urlpatterns = [
     path('addmovie/', hello.views.addMovie),
     path('sub/', hello.views.sub),
     url('movie-detail/(?P<movieId>\d+)$', hello.views.movieDetail),
+    url('post-review/(?P<movieId>\d+)$', hello.views.postReview),
     path('reports/', hello.views.reports),
     url(r'^activate/(?P<uid>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})$',
         hello.views.activate, name='activate'),

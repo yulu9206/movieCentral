@@ -321,6 +321,23 @@ def movieDetail(request, movieId):
             return redirect('/sub/')
     return render(request, 'movieDetail.html', data)
     
+def postReview(request, movieId):
+    url = mc_url + '/movie-review'
+    req_body = {
+        "comment": request.POST.get("comment", "defaultcomment"),
+        "movieId": movieId,
+        "reviewTitle": request.POST.get("reviewTitle", "defaultreviewTitle"),
+        "stars": request.POST.get("stars", "defaultstars"),
+        "userId": request.session['user']['userId']
+    }
+    req_body = json.dumps(req_body)
+    res = requests.post(url, data=req_body, headers=json_headers)
+    res_body = json.loads(res.content.decode('utf-8'))
+    if res.status_code == 201:
+        messages.info(request, "Your review has been submitted!")
+    else:
+        messages.error(request, res_body['error'])
+    return redirect('/movie-detail/' + movieId)
 
 def reports(request):
     url1 = mc_url + '/movies'

@@ -29,15 +29,32 @@
         <p>Description: {{movie.movieDesc}}</p>
       </div>
     </div>  
-    <!-- review start -->    					
     <div class="row">
-      <div class="col-sm-7">
         <hr/>
+        <h3>How do you like the movie?</h3>
+        <form method="POST" class="review-form" id="review-form" action="/post-review/{{movie.movieId}}">
+          {% csrf_token %}
+          <div class="form-group">
+              <label for="stars"></label>
+              Rating <input type="number" name="stars" id="stars" min="1" max="5"/>
+            </div>
+          <div class="form-group">
+            <label for="reviewTitle"></label>
+            <input type="text" style="width: 100%" name="reviewTitle" id="reviewTitle" placeholder="Review Title"/>
+          </div>
+          <div class="form-group">
+            <label for="comment"></label>
+            <textarea style="width: 100%" name="comment" id="comment" placeholder="I think the movie is..."></textarea>
+          </div>
+          <div class="form-group">
+            <input type="submit" name="submitReview" id="submitReviewn" class="form-submit" value="Submit"/>
+          </div>
+        </form>
         <div class="review-block">
           {% for review in reviews %}
           <div class="row">
             <div class="col-sm-3">
-              <img src="http://dummyimage.com/60x60/666/ffffff&text=No+Image" class="img-rounded">
+              <img src="https://dummyimage.com/60x60/666/ff5e00&text=MC" class="img-rounded">
               <div class="review-block-name">{{ review.user.username }}</div>
               <div class="review-block-date">{{ review.postDate }}</div>
             </div>
@@ -62,9 +79,7 @@
           <hr/>
           {% endfor %}
         </div>
-      </div>
     </div>
-      <!-- review end -->
   </div>
 </section>
 <hr></hr>
