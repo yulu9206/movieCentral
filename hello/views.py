@@ -294,19 +294,53 @@ def customerDetail(request, userId):
     return render(request, 'customerDetail.html', {'userDetail':userDetail})
 
 def movies(request):
-    # get-data
-    url1 = mc_url + '/movies'
-    url2 = mc_url + '/movie-genre/'
-    res1 = requests.get(url1).json()
-    data = res1['content']
-    for i in range(len(data)):
-        res2 = requests.get(url2 + str(data[i]['movieId'])).json()
-        temp = res2['genres']
-        if len(temp) >= 1:
-            data[i]['genre'] = temp[0]['genreName']
-        else:
-            data[i]['genre'] = ""
-    return render(request, 'movies.html', {"data": data, "user": request.session['user']})
+    if request.method == 'GET':
+        # get-data
+        url1 = mc_url + '/movies'
+        url2 = mc_url + '/movie-genre/'
+        res1 = requests.get(url1).json()
+        data = res1['content']
+        for i in range(len(data)):
+            res2 = requests.get(url2 + str(data[i]['movieId'])).json()
+            temp = res2['genres']
+            if len(temp) >= 1:
+                data[i]['genre'] = temp
+            else:
+                data[i]['genre'] = ""
+        return render(request, 'movies.html', {"data": data, "user": request.session['user']})
+    if request.method == 'POST':
+        # logging.info(request.POST.get('title'))
+        title = request.POST.get('title')
+        genre = request.POST.getlist('genre')
+        desc = request.POST.get('desc')
+
+        url1 = mc_url + '/movies'
+        url2 = mc_url + '/movie-genre/'
+        res1 = requests.get(url1).json()
+        data = res1['content']
+        for i in range(len(data)):
+            res2 = requests.get(url2 + str(data[i]['movieId'])).json()
+            temp = res2['genres']
+            if len(temp) >= 1:
+                data[i]['genre'] = temp
+            else:
+                data[i]['genre'] = ""
+        toreturn = []
+        for d in data:
+            gen = []
+            flag = False
+            for g in d['genre']:
+                gen.append(g['genreName'])
+            if title in d['movieTitle']and desc in d['movieDesc']:
+                for g in genre:
+                    if g not in gen:
+                        flag = True
+            else:
+                flag = True
+            if not flag:
+                toreturn.append(d)
+
+        return render(request, 'movies.html', {"data":toreturn, "user":request.session['user']})
 
 def movieDetail(request, movieId):
 
@@ -316,14 +350,12 @@ def movieDetail(request, movieId):
     res2 = requests.get(url2).json()
     data = res['movie']
     user = res2['user']
-    logging.info(data)
-    logging.info(user)
 
     if data['movie_type'] != 1:
         if user['role'] != 2:
             if not user['subexpiredate']:
                 return redirect('/sub/')
-        
+
     return render(request, 'movieDetail.html', {"data": data, "user": request.session['user']})
 
 def reports(request):
