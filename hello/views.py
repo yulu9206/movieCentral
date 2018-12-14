@@ -16,6 +16,10 @@ from django.core.mail import EmailMessage
 from .models import Greeting, TempUser
 from .models import Greeting
 
+from random import randint
+from datetime import datetime
+
+
 LOGGING = {
     'version': 1,
     'handlers': {
@@ -243,12 +247,13 @@ def logout(request):
 def customers(request):
     url = mc_url + '/user'
     res = requests.get(url)
+
     if res.status_code == 200:
         res_body = json.loads(res.content.decode('utf-8'))
         customers = res_body['content']
     else:
         customers = {'defaul': 'default'}
-    return render(request, 'customers.html', {'customers': customers})
+    return render(request, 'customers.html', {'customers': customers, 'user':request.session['user']})
 
 def deleteCustomer(request, userId):
     url = mc_url + '/user/' + userId
@@ -272,7 +277,6 @@ def customerDetail(request, userId):
     return render(request, 'customerDetail.html', {'userDetail':userDetail})
 
 def movies(request):
-    # get-data
     url1 = mc_url + '/movies'
     url2 = mc_url + '/movie-genre/'
     res1 = requests.get(url1).json()
@@ -284,7 +288,7 @@ def movies(request):
             data[i]['genre'] = temp[0]['genreName']
         else:
             data[i]['genre'] = ""
-    return render(request, 'movies.html', {"data": data})
+    return render(request, 'movies.html', {"data": data, "user": request.session['user']})
 
 def movieDetail(request, movieId):
 
@@ -296,17 +300,83 @@ def movieDetail(request, movieId):
     user = res2['user']
     logging.info(data)
     logging.info(user)
-
+    subexpireMonth = int(user['subexpiredate'].split('-')[1])
+    currentMonth = datetime.now().month
+    print (currentMonth, subexpireMonth)
     if data['movie_type'] != 1:
-        if user['subexpiredate']:
-            return render(request, 'movieDetail.html', {"data": data});
-        else:
+        if subexpireMonth < currentMonth:
             return redirect('/sub/')
-    else:
-        return render(request, 'movieDetail.html', {"data": data});
+    return render(request, 'movieDetail.html', {"data": data, "user": request.session['user']})
+    
 
 def reports(request):
-    return render(request, 'reports.html')
+    url1 = mc_url + '/movies'
+    url2 = mc_url + '/movie-genre/'
+    res1 = requests.get(url1).json()
+    data = res1['content']
+    for i in range(len(data)):
+        res2 = requests.get(url2 + str(data[i]['movieId'])).json()
+        temp = res2['genres']
+        if len(temp) >= 1:
+            data[i]['genre'] = temp[0]['genreName']
+        else:
+            data[i]['genre'] = ""
+        # placeholder movieplay counts
+        d = randint(0,3)
+        w = randint(d, d+10)
+        m = randint(w, w+20)
+        data[i]['lastday_play'] = d
+        data[i]['lastweek_play'] = w
+        data[i]['lastmonth_play'] = m
+    return render(request, 'reports.html', {"data":data, "user": request.session['user']})
+
+def customerHistory(request, userId):
+    url = mc_url + '/user/' + userId
+    res = requests.get(url).json()
+    target = res['user']
+
+    # placeholder data
+    history = {"dates": ['2018-11-10', '2018-10-29', '2018-10-27'], 'times': [3,5,4]}
+    return render(request, 'history.html', {"target": target, "history": history, "user": request.session['user']})
+
+def topten(request):
+    # placeholder data
+    lastday = {"id":[21,1,2,3,4,10,20,26,27,28], "counts":[5,3,2,1,0,0,0,0,0,0]}
+    lastweek = {"id":[29,10,21,1,2,3,4,10,20,26], "counts":[13,8,6,3,2,1,0,0,0,0]}
+    lastmonth = {"id":[30,4,3,1,2,29,10,21,20,26], "counts":[30,28,20,19,18,13,8,6,0,0]}
+
+    return render(request, "topten.html", {"user": request.session['user'],
+                                            "day": lastday,
+                                            "week": lastweek,
+                                            "month": lastmonth})
+
+def financial(request):
+    # placeholder data
+    payperview =    [2,3,2,5,4,1,1,3,4,4,2,0]
+    active =        [4,6,5,8,10,5,5,7,9,6,4,2]
+    rest =          [4,6,11,7,5,3,3,2,2,1,1,1]
+    ppv_i = []
+    for i in payperview:
+        ppv_i.append(i*5)
+    sub_i = [20,30,30,20,10,10,10,10,0,0,0,0]
+    total_i = []
+    for i in range(12):
+        total_i.append(ppv_i[i] + sub_i[i])
+    month = []
+    m = datetime.now().month
+    for i in range(12):
+        if (m+i)%12 == 0:
+            month.append(12)
+        else:
+            month.append(12 - (m+i)%12)
+    return render(request, "financial.html", {"user": request.session['user']
+                                            , "ppv":payperview
+                                            , "active": active
+                                            , "rest": rest
+                                            , "month": month
+                                            , "ppv_i": ppv_i
+                                            , "sub_i": sub_i
+                                            , "total_i": total_i})
 
 # def db(request):
 # 	greeting = Greeting()
