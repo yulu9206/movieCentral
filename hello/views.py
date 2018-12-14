@@ -160,7 +160,25 @@ def editCustomer(request, userId):
 
 def sub(request):
     if request.method == 'GET':
-        return render(request, 'subscribe.html')
+        url = mc_url + '/user/' + str(request.session['user']['userId'])
+        res = requests.get(url).json()
+        user = res['user']
+        if user['role'] == 2:
+            messages.error(request, 'Admin can not subscribe!')
+            return redirect('/')
+        elif user['subexpiredate'] is not None:
+            arr = user['subexpiredate'].split('-')
+            year = datetime.now().year
+            month = datetime.now().month
+            if arr[0] < year:
+                return render(request, 'subscribe.html')
+            elif arr[0] == year and arr[1] < month:
+                return render(request, 'subscribe.html')
+            else:
+                messages.error(request, 'You have already subscribed!')
+                return redirect('/')
+        else:
+            return render(request, 'subscribe.html', {'user': user})
 
     if request.method == 'POST':
         try:
@@ -185,7 +203,6 @@ def sub(request):
             messages.success(request, 'Thank you for subscribing!')
         else:
             messages.error(request, res_body['error'])
-        user = request.session['user']
         return redirect('/profile')
 
 def addMovie(request):
@@ -303,9 +320,11 @@ def movieDetail(request, movieId):
     logging.info(user)
 
     if data['movie_type'] != 1:
-        if user['subexpiredate']:
-            return render(request, 'movieDetail.html', {"data": data, "user": request.session['user']})
-    return redirect('/sub/')
+        if user['role'] != 2:
+            if not user['subexpiredate']:
+                return redirect('/sub/')
+        
+    return render(request, 'movieDetail.html', {"data": data, "user": request.session['user']})
 
 def reports(request):
     url1 = mc_url + '/movies'

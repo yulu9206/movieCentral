@@ -36,6 +36,11 @@
       <li>
         <a href="/movies"><span class="glyphicon glyphicon-film"></span> Movies</a>
       </li>
+      {% if user.role is not 2%}
+        <li>
+          <a href="/sub/"><span class="glyphicon glyphicon-credit-card"></span> Subscribe</a>
+        </li>
+      {% endif %}
       {% if user.role is 2 %}
       <li>
         <a href="/customers"><span class="glyphicon glyphicon-info-sign"></span> Customers</a>
