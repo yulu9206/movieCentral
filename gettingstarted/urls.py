@@ -12,6 +12,7 @@ import hello.views
 urlpatterns = [
     url(r'^$', hello.views.index, name='index'),
     url(r'^customer/delete/(?P<userId>\d+)$', hello.views.deleteCustomer),
+    url(r'^movie-review/(?P<reviewId>\d+)$', hello.views.deleteReview),
     url(r'^customer/detail/(?P<userId>\d+)$', hello.views.customerDetail),
     url(r'^customer/edit/(?P<userId>\d+)$', hello.views.editCustomer),
     path('profile/', hello.views.profile),
