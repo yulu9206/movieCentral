@@ -294,6 +294,7 @@ def customerDetail(request, userId):
     return render(request, 'customerDetail.html', {'userDetail':userDetail})
 
 def movies(request):
+<<<<<<< HEAD
     if request.method == 'GET':
         # get-data
         url1 = mc_url + '/movies'
@@ -341,9 +342,44 @@ def movies(request):
                 toreturn.append(d)
 
         return render(request, 'movies.html', {"data":toreturn, "user":request.session['user']})
+=======
+    url1 = mc_url + '/movies'
+    url2 = mc_url + '/movie-genre/'
+    res1 = requests.get(url1).json()
+    data = res1['content']
+    for i in range(len(data)):
+        res2 = requests.get(url2 + str(data[i]['movieId'])).json()
+        temp = res2['genres']
+        if len(temp) >= 1:
+            data[i]['genre'] = temp[0]['genreName']
+        else:
+            data[i]['genre'] = ""
+    return render(request, 'movies.html', {"data": data, "user": request.session['user']})
+>>>>>>> d91a8a002db79acad556073485f8c506ff386444
 
 def movieDetail(request, movieId):
+    url_movie = mc_url + '/movie/' + movieId
+    url_review = mc_url + '/movie-reviews?movieId=' + movieId
 
+    res_movie = requests.get(url_movie).json()
+    res_review = requests.get(url_review).json()
+
+    movie = res_movie['movie']
+    reviews = res_review['content']
+    user = request.session['user']
+
+    for review in reviews:
+        starCount = review['stars']
+        review['stars'] = 's' * starCount
+        review['nostars'] = 'n'* (5 - starCount)
+    
+    data = {
+        'user': user,
+        'movie': movie,
+        'reviews': reviews
+    }
+
+<<<<<<< HEAD
     url = mc_url + '/movie/' + movieId
     url2 = mc_url + '/user/' + str(request.session['user']['userId'])
     res = requests.get(url).json()
@@ -357,6 +393,34 @@ def movieDetail(request, movieId):
                 return redirect('/sub/')
 
     return render(request, 'movieDetail.html', {"data": data, "user": request.session['user']})
+=======
+    logging.info(data)
+
+    subexpireMonth = int(user['subexpiredate'].split('-')[1])
+    currentMonth = datetime.now().month
+    if movie['movie_type'] != 1:
+        if subexpireMonth < currentMonth:
+            return redirect('/sub/')
+    return render(request, 'movieDetail.html', data)
+    
+def postReview(request, movieId):
+    url = mc_url + '/movie-review'
+    req_body = {
+        "comment": request.POST.get("comment", "defaultcomment"),
+        "movieId": movieId,
+        "reviewTitle": request.POST.get("reviewTitle", "defaultreviewTitle"),
+        "stars": request.POST.get("stars", "defaultstars"),
+        "userId": request.session['user']['userId']
+    }
+    req_body = json.dumps(req_body)
+    res = requests.post(url, data=req_body, headers=json_headers)
+    res_body = json.loads(res.content.decode('utf-8'))
+    if res.status_code == 201:
+        messages.info(request, "Your review has been submitted!")
+    else:
+        messages.error(request, res_body['error'])
+    return redirect('/movie-detail/' + movieId)
+>>>>>>> d91a8a002db79acad556073485f8c506ff386444
 
 def reports(request):
     url1 = mc_url + '/movies'
