@@ -4,32 +4,68 @@
 {% block movieDetail %}
 
 <section>
-  <div class="row">
-    <div class="text-center">
-      <h1> {{ data.movieTitle }} </h1>
-    </div>
-    <hr></hr>
-    <div class="col-lg-8 col-md-8 col-sm-8">
-      <div class="container-fluid">
-        <div class="row embed-responsive embed-responsive-16by9" style= "margin-left:50px;margin-right:50px;">
-          <iframe class="embed-responsive-item" src="{{ data.trailerUrl }}" allowfullscreen></iframe>
+  <div class="container">
+    <div class="row">
+      <div class="text-center">
+        <h1> {{ movie.movieTitle }} </h1>
+      </div>
+      <hr></hr>
+      <div class="col-lg-8 col-md-8 col-sm-8">
+        <div class="container-fluid">
+          <div class="row embed-responsive embed-responsive-16by9" style= "margin-left:50px;margin-right:50px;">
+            <iframe class="embed-responsive-item" src="{{ movie.trailerUrl }}" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-3">
+        <br><br><br>
+        <p>Genre: {{movie.genres.0.genreName}}</p>
+        <p>Release Date: {{movie.releaseDate}}</p>
+        <p>MPAA Rating: {{movie.mpaaRating}}</p>
+        <p>Length: {{movie.length}} minutes</p>
+        <p>Director: {% for d in movie.directors %}d, {% endfor %}</p>
+        <p>Director: {% for d in movie.characters %}d, {% endfor %}</p>
+        <p>Review: {{movie.stars}} stars</p>
+        <p>Description: {{movie.movieDesc}}</p>
+      </div>
+    </div>  
+    <!-- review start -->    					
+    <div class="row">
+      <div class="col-sm-7">
+        <hr/>
+        <div class="review-block">
+          {% for review in reviews %}
+          <div class="row">
+            <div class="col-sm-3">
+              <img src="http://dummyimage.com/60x60/666/ffffff&text=No+Image" class="img-rounded">
+              <div class="review-block-name">{{ review.user.username }}</div>
+              <div class="review-block-date">{{ review.postDate }}</div>
+            </div>
+            <div class="col-sm-9">
+              <div class="review-block-rate">
+                {% for s in review.stars %}
+                <button type="button" class="btn btn-warning btn-xs" aria-label="Left Align">
+                  <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                </button>
+                {% endfor %}
+
+                {% for n in review.nostars %}
+                <button type="button" class="btn btn-default btn-grey btn-xs" aria-label="Left Align">
+                  <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                </button>
+                {% endfor %}
+              </div>
+              <div class="review-block-title">{{ review.reviewTitle }}</div>
+              <div class="review-block-description"> {{ review.comment }} </div>
+            </div>
+          </div>
+          <hr/>
+          {% endfor %}
         </div>
       </div>
     </div>
-    <div class="col-lg-3 col-md-3 col-sm-3">
-      <br><br><br>
-      <p>Genre: {{data.genres.0.genreName}}</p>
-      <p>Release Date: {{data.releaseDate}}</p>
-      <p>MPAA Rating: {{data.mpaaRating}}</p>
-      <p>Length: {{data.length}} minutes</p>
-      <p>Director: {% for d in data.directors %}d, {% endfor %}</p>
-      <p>Director: {% for d in data.characters %}d, {% endfor %}</p>
-      <p>Review: {{data.stars}} stars</p>
-      <p>Description: {{data.movieDesc}}</p>
-    </div>
-    <div class="col-lg-1 col-md-1 col-sm-1"></div>
+      <!-- review end -->
   </div>
-  <hr></hr>
 </section>
-
+<hr></hr>
 {% endblock %}

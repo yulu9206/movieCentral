@@ -291,22 +291,35 @@ def movies(request):
     return render(request, 'movies.html', {"data": data, "user": request.session['user']})
 
 def movieDetail(request, movieId):
+    url_movie = mc_url + '/movie/' + movieId
+    url_review = mc_url + '/movie-reviews?movieId=' + movieId
 
-    url = mc_url + '/movie/' + movieId
-    url2 = mc_url + '/user/' + str(request.session['user']['userId'])
-    res = requests.get(url).json()
-    res2 = requests.get(url2).json()
-    data = res['movie']
-    user = res2['user']
+    res_movie = requests.get(url_movie).json()
+    res_review = requests.get(url_review).json()
+
+    movie = res_movie['movie']
+    reviews = res_review['content']
+    user = request.session['user']
+
+    for review in reviews:
+        starCount = review['stars']
+        review['stars'] = 's' * starCount
+        review['nostars'] = 'n'* (5 - starCount)
+    
+    data = {
+        'user': user,
+        'movie': movie,
+        'reviews': reviews
+    }
+
     logging.info(data)
-    logging.info(user)
+
     subexpireMonth = int(user['subexpiredate'].split('-')[1])
     currentMonth = datetime.now().month
-    print (currentMonth, subexpireMonth)
-    if data['movie_type'] != 1:
+    if movie['movie_type'] != 1:
         if subexpireMonth < currentMonth:
             return redirect('/sub/')
-    return render(request, 'movieDetail.html', {"data": data, "user": request.session['user']})
+    return render(request, 'movieDetail.html', data)
     
 
 def reports(request):
