@@ -1,58 +1,26 @@
 {% extends "nav.html" %}
 {% load staticfiles %}
 
-{% block reports %}
-
+{% block topten %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
 <div class="container">
-  <section>
-    <div class="container-fluid">
-      <h1> Top 10 movies</h1>
-    </div>
-    <hr></hr>
-    <div class="row">
-      <div class = "col-sm-6 col-md-6 col-lg-6">
-        <table class="table table-hover">
-          <thead>
-            <th>Movie Id</th>
-            <th>Movie Name</th>
-            <th>Last 24 hours</th>
-            <th>Last Week</th>
-            <th>Last Month</th>
-          </thead>
-          {% for d in data%}
-            <tr>
-              <td>{{d.movieId}}</td>
-              <td>{{d.movieTitle}}</td>
-              <td>{{d.lastday_play}}</td>
-              <td>{{d.lastweek_play}}</td>
-              <td>{{d.lastmonth_play}}</td>
-            </tr>
-          {% endfor %}
-        </table>
-      </div>
-      <div class = "col-sm-6 col-md-6 col-lg-6">
-        <div class="center-block chart-container" style="position: relative; height:2vh; width:40vw">
-          <canvas id="lastday"></canvas>
-          <canvas id="lastweek"></canvas>
-          <canvas id="lastmonth"></canvas>
-        </div>
-      </div>
-    </div>
-  </section>
+<section>
+  <div class="container-fluid">
+    <h1> Top 10 active users </h1>
+  </div>
+  <hr></hr>
+  <div class="center-block chart-container" style="position: relative; height:2vh; width:40vw">
+    <canvas id="lastday"></canvas>
+    <canvas id="lastweek"></canvas>
+    <canvas id="lastmonth"></canvas>
+  </div>
+</section>
 </div>
 
 <script>
-  var l = []
-  var d = []
-  {% for d in data%}
-    l.push({{d.movieId}})
-    d.push({{d.lastday_play}})
-  {% endfor %}
-  l = l.sort((a,b) => {return b-a;}).slice(0,11);
-  d = d.sort((a,b) => {return b-a;}).slice(0,11);
   var ctx = document.getElementById('lastday').getContext('2d');
-
+  var l = {{ day.id|safe }};
+  var d = {{ day.counts|safe }};
   var chart = new Chart(ctx, {
     type: 'bar',
     data: {
@@ -80,7 +48,7 @@
         xAxes: [{
             scaleLabel: {
                   display: true,
-                  labelString: 'Movie id'
+                  labelString: 'User id'
               }
           }]
       }
@@ -88,22 +56,15 @@
 });
 </script>
 <script>
-  var l = []
-  var d = []
-  {% for d in data%}
-    l.push({{d.movieId}})
-    d.push({{d.lastweek_play}})
-  {% endfor %}
-  l = l.sort((a,b) => {return b-a;}).slice(0,11);
-  d = d.sort((a,b) => {return b-a;}).slice(0,11);
   var ctx = document.getElementById('lastweek').getContext('2d');
-
+  var l = {{ week.id|safe }};
+  var d = {{ week.counts|safe }};
   var chart = new Chart(ctx, {
     type: 'bar',
     data: {
         labels: l,
         datasets: [{
-            label: "Last Week",
+            label: "Last week",
             backgroundColor: 'rgb(56,216,113)',
             borderColor: 'rgb(56,216,113)',
             data: d,
@@ -125,7 +86,7 @@
         xAxes: [{
             scaleLabel: {
                   display: true,
-                  labelString: 'Movie id'
+                  labelString: 'User id'
               }
           }]
       }
@@ -133,22 +94,15 @@
 });
 </script>
 <script>
-  var l = []
-  var d = []
-  {% for d in data%}
-    l.push({{d.movieId}})
-    d.push({{d.lastmonth_play}})
-  {% endfor %}
-  l = l.sort((a,b) => {return b-a;}).slice(0,11);
-  d = d.sort((a,b) => {return b-a;}).slice(0,11);
   var ctx = document.getElementById('lastmonth').getContext('2d');
-
+  var l = {{ month.id|safe }};
+  var d = {{ month.counts|safe }};
   var chart = new Chart(ctx, {
     type: 'bar',
     data: {
         labels: l,
         datasets: [{
-            label: "Last Month",
+            label: "Last month",
             backgroundColor: 'rgb(244,214,130)',
             borderColor: 'rgb(244,214,130)',
             data: d,
@@ -170,12 +124,13 @@
         xAxes: [{
             scaleLabel: {
                   display: true,
-                  labelString: 'Movie id'
+                  labelString: 'User id'
               }
           }]
       }
   }
 });
 </script>
+
 
 {% endblock %}
