@@ -294,7 +294,6 @@ def customerDetail(request, userId):
     return render(request, 'customerDetail.html', {'userDetail':userDetail})
 
 def movies(request):
-<<<<<<< HEAD
     if request.method == 'GET':
         # get-data
         url1 = mc_url + '/movies'
@@ -342,20 +341,6 @@ def movies(request):
                 toreturn.append(d)
 
         return render(request, 'movies.html', {"data":toreturn, "user":request.session['user']})
-=======
-    url1 = mc_url + '/movies'
-    url2 = mc_url + '/movie-genre/'
-    res1 = requests.get(url1).json()
-    data = res1['content']
-    for i in range(len(data)):
-        res2 = requests.get(url2 + str(data[i]['movieId'])).json()
-        temp = res2['genres']
-        if len(temp) >= 1:
-            data[i]['genre'] = temp[0]['genreName']
-        else:
-            data[i]['genre'] = ""
-    return render(request, 'movies.html', {"data": data, "user": request.session['user']})
->>>>>>> d91a8a002db79acad556073485f8c506ff386444
 
 def movieDetail(request, movieId):
     url_movie = mc_url + '/movie/' + movieId
@@ -372,28 +357,13 @@ def movieDetail(request, movieId):
         starCount = review['stars']
         review['stars'] = 's' * starCount
         review['nostars'] = 'n'* (5 - starCount)
-    
+
     data = {
         'user': user,
         'movie': movie,
         'reviews': reviews
     }
 
-<<<<<<< HEAD
-    url = mc_url + '/movie/' + movieId
-    url2 = mc_url + '/user/' + str(request.session['user']['userId'])
-    res = requests.get(url).json()
-    res2 = requests.get(url2).json()
-    data = res['movie']
-    user = res2['user']
-
-    if data['movie_type'] != 1:
-        if user['role'] != 2:
-            if not user['subexpiredate']:
-                return redirect('/sub/')
-
-    return render(request, 'movieDetail.html', {"data": data, "user": request.session['user']})
-=======
     logging.info(data)
 
     subexpireMonth = int(user['subexpiredate'].split('-')[1])
@@ -402,7 +372,7 @@ def movieDetail(request, movieId):
         if subexpireMonth < currentMonth:
             return redirect('/sub/')
     return render(request, 'movieDetail.html', data)
-    
+
 def postReview(request, movieId):
     url = mc_url + '/movie-review'
     req_body = {
@@ -420,7 +390,6 @@ def postReview(request, movieId):
     else:
         messages.error(request, res_body['error'])
     return redirect('/movie-detail/' + movieId)
->>>>>>> d91a8a002db79acad556073485f8c506ff386444
 
 def reports(request):
     url1 = mc_url + '/movies'
