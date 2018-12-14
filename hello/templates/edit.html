@@ -1,0 +1,32 @@
+{% extends "nav.html" %}
+{% load staticfiles %}
+
+{% block edit %}
+<div class="container">
+  <section>
+    <div class="container-fluid">
+      <h1>Edit Movie</h1>
+    </div>
+    <hr></hr>
+    <div class="row">
+      <div class = "col-sm-6 col-md-6 col-lg-6">
+        <table class="table table-hover">
+          <thead>
+            <th>Movie Id</th>
+            <th>Movie Name</th>
+          </thead>
+          {% for d in data%}
+            <tr>
+              <td>{{d.movieId}}</td>
+              <td>{{d.movieTitle}}</td>
+              <td>{{d.lastday_play}}</td>
+              <td>{{d.lastweek_play}}</td>
+              <td>{{d.lastmonth_play}}</td>
+            </tr>
+          {% endfor %}
+        </table>
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock %}

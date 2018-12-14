@@ -477,6 +477,26 @@ def financial(request):
                                             , "sub_i": sub_i
                                             , "total_i": total_i})
 
+def edit(request, movieId = ''):
+    if movieId == '':
+        url1 = mc_url + '/movies'
+        url2 = mc_url + '/movie-genre/'
+        res1 = requests.get(url1).json()
+        data = res1['content']
+        for i in range(len(data)):
+            res2 = requests.get(url2 + str(data[i]['movieId'])).json()
+            temp = res2['genres']
+            if len(temp) >= 1:
+                data[i]['genre'] = temp
+            else:
+                data[i]['genre'] = ""
+        logging.info(data)
+        return render(request, 'edit.html', {"data": data, "user": request.session['user']})
+    else:
+        url = mc_url + '/movie/' + str(movieId)
+        res = requests.get(url).json()
+        logging.info(res)
+        return render(request, 'edit.html', {"id": res})
 # def db(request):
 # 	greeting = Greeting()
 # 	greeting.save()
