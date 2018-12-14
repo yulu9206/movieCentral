@@ -331,7 +331,7 @@ def movies(request):
             flag = False
             for g in d['genre']:
                 gen.append(g['genreName'])
-            if title in d['movieTitle']and desc in d['movieDesc']:
+            if title in d['movieTitle'] and desc in d['movieDesc']:
                 for g in genre:
                     if g not in gen:
                         flag = True
@@ -350,6 +350,7 @@ def movieDetail(request, movieId):
     res_review = requests.get(url_review).json()
 
     movie = res_movie['movie']
+    logging.info(movie)
     reviews = res_review['content']
     user = request.session['user']
 
@@ -365,9 +366,13 @@ def movieDetail(request, movieId):
     }
 
     logging.info(data)
-
-    subexpireMonth = int(user['subexpiredate'].split('-')[1])
+    if user['subexpiredate']:
+        subexpireMonth = int(user['subexpiredate'].split('-')[1])
+    else:
+        subexpireMonth = -1
     currentMonth = datetime.now().month
+    if user['role'] == 2:
+        return render(request, 'movieDetail.html', data)
     if movie['movie_type'] != 1:
         if subexpireMonth < currentMonth:
             return redirect('/sub/')

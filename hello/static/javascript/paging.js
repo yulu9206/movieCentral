@@ -32,10 +32,10 @@ function pag(listId, pagId, target){
         var startItem = currPage * rowsShown;
         var endItem = startItem + rowsShown;
         if(!target) {
-          $(listId +' li').css('opacity','0.0').hide().slice(startItem, endItem).animate({opacity:1}, 300);
+          $(listId +' li').css('opacity','0.0').hide().slice(startItem, endItem).css('display','list-item').animate({opacity:1}, 300);
         }
         else {
-          $(listId).find('.target').css('opacity','0.0').hide().slice(startItem, endItem).animate({opacity:1}, 300);
+          $(listId).find('.target').css('opacity','0.0').hide().slice(startItem, endItem).css('display','list-item').animate({opacity:1}, 300);
         }
     });
 }
