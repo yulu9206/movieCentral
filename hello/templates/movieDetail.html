@@ -32,19 +32,23 @@
     <div class="row">
         <hr/>
         <h3>How do you like the movie?</h3>
+        {% if this_review %}
+        <form method="POST" class="review-form" id="review-form" action="/edit-review/{{this_review.reviewId}}">
+        {% else %}
         <form method="POST" class="review-form" id="review-form" action="/post-review/{{movie.movieId}}">
+        {% endif %}
           {% csrf_token %}
           <div class="form-group">
               <label for="stars"></label>
-              Rating <input type="number" name="stars" id="stars" min="1" max="5"/>
+              Rating <input type="number" name="stars" id="stars" min="1" max="5" value="{{this_review.stars}}"/>
             </div>
           <div class="form-group">
             <label for="reviewTitle"></label>
-            <input type="text" style="width: 100%" name="reviewTitle" id="reviewTitle" placeholder="Review Title"/>
+            <input type="text" style="width: 100%" name="reviewTitle" id="reviewTitle" placeholder="Review Title" value="{{this_review.reviewTitle}}"/>
           </div>
           <div class="form-group">
             <label for="comment"></label>
-            <textarea style="width: 100%" name="comment" id="comment" placeholder="I think the movie is..."></textarea>
+            <textarea style="width: 100%" name="comment" id="comment" placeholder="I think the movie is..." > {{this_review.comment}}</textarea>
           </div>
           <div class="form-group">
             <input type="submit" name="submitReview" id="submitReviewn" class="form-submit" value="Submit"/>
@@ -77,7 +81,7 @@
             </div>
             {% if review.user.userId == user.userId %}
             <div class="col-sm-3">
-              <a href="/movie-review/{{user.userId}}/{{review.reviewId}}" type="button" class="btn btn-default btn-warning">Edit</a>
+              <a href="/movie-detail/{{movie.movieId}}/{{review.reviewId}}" type="button" class="btn btn-default btn-warning">Edit</a>
               <a href="/movie-review/{{review.reviewId}}" type="button" class="btn btn-default btn-danger">Delete</a>
             </div>
             {% endif %}
