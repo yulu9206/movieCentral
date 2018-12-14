@@ -265,6 +265,18 @@ def deleteCustomer(request, userId):
         messages.error(request, res_body['error'])
     return redirect('/customers')
 
+def deleteReview(request, reviewId):
+    url = mc_url + '/movie-review/' + reviewId
+    res = requests.get(url).json()
+    movieId = res['Review']['movie']['movieId']
+    res = requests.delete(url, headers=json_headers)
+    res_body = json.loads(res.content.decode('utf-8'))
+    if res.status_code == 200:
+        messages.success(request, 'Your review has been deleted!')
+    else:
+        messages.error(request, res_body['error'])
+    return redirect('/movie-detail/' + str(movieId))
+
 def customerDetail(request, userId):
     url = mc_url + '/user/' + userId
     res = requests.get(url)

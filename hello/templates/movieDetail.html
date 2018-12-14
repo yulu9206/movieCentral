@@ -58,7 +58,7 @@
               <div class="review-block-name">{{ review.user.username }}</div>
               <div class="review-block-date">{{ review.postDate }}</div>
             </div>
-            <div class="col-sm-9">
+            <div class="col-sm-6">
               <div class="review-block-rate">
                 {% for s in review.stars %}
                 <button type="button" class="btn btn-warning btn-xs" aria-label="Left Align">
@@ -75,6 +75,12 @@
               <div class="review-block-title">{{ review.reviewTitle }}</div>
               <div class="review-block-description"> {{ review.comment }} </div>
             </div>
+            {% if review.user.userId == user.userId %}
+            <div class="col-sm-3">
+              <a href="/movie-review/{{user.userId}}/{{review.reviewId}}" type="button" class="btn btn-default btn-warning">Edit</a>
+              <a href="/movie-review/{{review.reviewId}}" type="button" class="btn btn-default btn-danger">Delete</a>
+            </div>
+            {% endif %}
           </div>
           <hr/>
           {% endfor %}
