@@ -2,5 +2,246 @@
 {% load staticfiles %}
 
 {% block financial %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+<div class="container">
+<section>
+  <div class="container-fluid">
+    <h1> Financial Report </h1>
+  </div>
+  <hr></hr>
+  <div class="container-fluid">
+    <canvas id="user" width="300" height="120" ></canvas>
+    <canvas id="income" width="300" height="120" ></canvas>
+  </div>
+</section>
+</div>
 
+
+<script>
+  var ctx = document.getElementById("user");
+  var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: {{month|safe}},
+      datasets: [{
+          label: 'Pay-per-view User',
+          data: {{ppv|safe}},
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(255, 99, 132, 0.2)'
+          ],
+          borderColor: [
+            'rgba(255,99,132,1)',
+            'rgba(255,99,132,1)',
+            'rgba(255,99,132,1)',
+            'rgba(255,99,132,1)',
+            'rgba(255,99,132,1)',
+            'rgba(255,99,132,1)',
+            'rgba(255,99,132,1)',
+            'rgba(255,99,132,1)',
+            'rgba(255,99,132,1)',
+            'rgba(255,99,132,1)',
+            'rgba(255,99,132,1)',
+            'rgba(255,99,132,1)'
+          ],
+          borderWidth: 2
+        },
+        {
+          label: 'Active User',
+          data: {{active|safe}},
+          backgroundColor: [
+            'rgba(255, 159, 64, 0.2)',
+            'rgba(255, 159, 64, 0.2)',
+            'rgba(255, 159, 64, 0.2)',
+            'rgba(255, 159, 64, 0.2)',
+            'rgba(255, 159, 64, 0.2)',
+            'rgba(255, 159, 64, 0.2)',
+            'rgba(255, 159, 64, 0.2)',
+            'rgba(255, 159, 64, 0.2)',
+            'rgba(255, 159, 64, 0.2)',
+            'rgba(255, 159, 64, 0.2)',
+            'rgba(255, 159, 64, 0.2)',
+            'rgba(255, 159, 64, 0.2)'
+          ],
+          borderColor: [
+            'rgba(255, 159, 64, 1)',
+            'rgba(255, 159, 64, 1)',
+            'rgba(255, 159, 64, 1)',
+            'rgba(255, 159, 64, 1)',
+            'rgba(255, 159, 64, 1)',
+            'rgba(255, 159, 64, 1)',
+            'rgba(255, 159, 64, 1)',
+            'rgba(255, 159, 64, 1)',
+            'rgba(255, 159, 64, 1)',
+            'rgba(255, 159, 64, 1)',
+            'rgba(255, 159, 64, 1)',
+            'rgba(255, 159, 64, 1)'
+          ],
+          borderWidth: 2
+        },
+        {
+          label: 'Inactive User',
+          data: {{rest|safe}},
+          backgroundColor: [
+            'rgba(54 , 155, 243, 0.2)',
+            'rgba(54 , 155, 243, 0.2)',
+            'rgba(54 , 155, 243, 0.2)',
+            'rgba(54 , 155, 243, 0.2)',
+            'rgba(54 , 155, 243, 0.2)',
+            'rgba(54 , 155, 243, 0.2)',
+            'rgba(54 , 155, 243, 0.2)',
+            'rgba(54 , 155, 243, 0.2)',
+            'rgba(54 , 155, 243, 0.2)',
+            'rgba(54 , 155, 243, 0.2)',
+            'rgba(54 , 155, 243, 0.2)',
+            'rgba(54 , 155, 243, 0.2)'
+          ],
+          borderColor: [
+            'rgba(54 , 155, 243, 1)',
+            'rgba(54 , 155, 243, 1)',
+            'rgba(54 , 155, 243, 1)',
+            'rgba(54 , 155, 243, 1)',
+            'rgba(54 , 155, 243, 1)',
+            'rgba(54 , 155, 243, 1)',
+            'rgba(54 , 155, 243, 1)',
+            'rgba(54 , 155, 243, 1)',
+            'rgba(54 , 155, 243, 1)',
+            'rgba(54 , 155, 243, 1)',
+            'rgba(54 , 155, 243, 1)',
+            'rgba(54 , 155, 243, 1)'
+          ],
+          borderWidth: 2
+        }
+      ]
+    },
+    options: {
+      title: {
+            display: true,
+            text: 'User overview'
+        },
+      scales: {
+        yAxes: [{
+          stacked: true,
+          ticks: {
+            beginAtZero: true
+          }
+        }],
+        xAxes: [{
+          stacked: true,
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+
+      }
+    }
+  });
+</script>
+<script>
+  var ctx = document.getElementById("income");
+  var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: {{month|safe}},
+      datasets: [{
+          label: 'Pay-per-view Income',
+          data: {{ppv_i|safe}},
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(255, 99, 132, 0.2)'
+          ],
+          borderColor: [
+            'rgba(255,99,132,1)',
+            'rgba(255,99,132,1)',
+            'rgba(255,99,132,1)',
+            'rgba(255,99,132,1)',
+            'rgba(255,99,132,1)',
+            'rgba(255,99,132,1)',
+            'rgba(255,99,132,1)',
+            'rgba(255,99,132,1)',
+            'rgba(255,99,132,1)',
+            'rgba(255,99,132,1)',
+            'rgba(255,99,132,1)',
+            'rgba(255,99,132,1)'
+          ],
+          borderWidth: 2
+        },
+        {
+          label: 'Subscription Income',
+          data: {{sub_i|safe}},
+          backgroundColor: [
+            'rgba(255, 159, 64, 0.2)',
+            'rgba(255, 159, 64, 0.2)',
+            'rgba(255, 159, 64, 0.2)',
+            'rgba(255, 159, 64, 0.2)',
+            'rgba(255, 159, 64, 0.2)',
+            'rgba(255, 159, 64, 0.2)',
+            'rgba(255, 159, 64, 0.2)',
+            'rgba(255, 159, 64, 0.2)',
+            'rgba(255, 159, 64, 0.2)',
+            'rgba(255, 159, 64, 0.2)',
+            'rgba(255, 159, 64, 0.2)',
+            'rgba(255, 159, 64, 0.2)'
+          ],
+          borderColor: [
+            'rgba(255, 159, 64, 1)',
+            'rgba(255, 159, 64, 1)',
+            'rgba(255, 159, 64, 1)',
+            'rgba(255, 159, 64, 1)',
+            'rgba(255, 159, 64, 1)',
+            'rgba(255, 159, 64, 1)',
+            'rgba(255, 159, 64, 1)',
+            'rgba(255, 159, 64, 1)',
+            'rgba(255, 159, 64, 1)',
+            'rgba(255, 159, 64, 1)',
+            'rgba(255, 159, 64, 1)',
+            'rgba(255, 159, 64, 1)'
+          ],
+          borderWidth: 2
+        },
+      ]
+    },
+    options: {
+      title: {
+            display: true,
+            text: 'Income overview'
+        },
+      scales: {
+        yAxes: [{
+          stacked: true,
+          ticks: {
+            beginAtZero: true
+          }
+        }],
+        xAxes: [{
+          stacked: true,
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+
+      }
+    }
+  });
+</script>
 {% endblock %}

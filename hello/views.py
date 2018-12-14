@@ -17,6 +17,8 @@ from .models import Greeting, TempUser
 from .models import Greeting
 
 from random import randint
+from datetime import datetime
+
 
 LOGGING = {
     'version': 1,
@@ -347,9 +349,32 @@ def topten(request):
                                             "month": lastmonth})
 
 def financial(request):
-
-    return render(request, "financial.html", {"user": request.session['user']})
-
+    # placeholder data
+    payperview =    [2,3,2,5,4,1,1,3,4,4,2,0]
+    active =        [4,6,5,8,10,5,5,7,9,6,4,2]
+    rest =          [4,6,11,7,5,3,3,2,2,1,1,1]
+    ppv_i = []
+    for i in payperview:
+        ppv_i.append(i*5)
+    sub_i = [20,30,30,20,10,10,10,10,0,0,0,0]
+    total_i = []
+    for i in range(12):
+        total_i.append(ppv_i[i] + sub_i[i])
+    month = []
+    m = datetime.now().month
+    for i in range(12):
+        if (m+i)%12 == 0:
+            month.append(12)
+        else:
+            month.append(12 - (m+i)%12)
+    return render(request, "financial.html", {"user": request.session['user']
+                                            , "ppv":payperview
+                                            , "active": active
+                                            , "rest": rest
+                                            , "month": month
+                                            , "ppv_i": ppv_i
+                                            , "sub_i": sub_i
+                                            , "total_i": total_i})
 
 # def db(request):
 # 	greeting = Greeting()
