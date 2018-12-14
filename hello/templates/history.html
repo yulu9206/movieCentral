@@ -1,0 +1,59 @@
+{% extends "nav.html" %}
+{% load staticfiles %}
+
+{% block history %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+<div class="container">
+<section>
+  <div class="container-fluid">
+    <h1> Viewing History for {{target.username}}</h1>
+  </div>
+  <hr></hr>
+  <div class="container-fluid">
+    <canvas id="myChart" width="300" height="100" ></canvas>
+  </div>
+</section>
+</div>
+
+<script>
+  var ctx = document.getElementById('myChart').getContext('2d');
+  var l = {{ history.dates|safe }};
+  var d = {{ history.times|safe }};
+  var chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: l,
+        datasets: [{
+            label: "Viewing count",
+            backgroundColor: 'rgba(0, 0, 0, 0)',
+            borderColor: 'rgb(255, 99, 132)',
+            data: d,
+        }],
+    },
+    options: {
+      scales: {
+        yAxes: [{
+            scaleLabel: {
+                  display: true,
+                  labelString: 'Viewing count'
+              },
+            ticks: {
+                beginAtZero: true,
+                stepSize: 1,
+                suggestedMax: 10
+            }
+          }],
+        xAxes: [{
+            scaleLabel: {
+                  display: true,
+                  labelString: 'Dates'
+              }
+          }]
+      }
+  }
+});
+</script>
+
+
+
+{% endblock %}
