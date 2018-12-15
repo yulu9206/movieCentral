@@ -175,27 +175,13 @@ def postEditReview(request, reviewId):
 
 def sub(request):
     if request.method == 'GET':
-        url = mc_url + '/user/' + str(request.session['user']['userId'])
-        res = requests.get(url).json()
-        user = res['user']
+        user = request.session['user']
         if user['role'] == 2:
-            messages.error(request, 'Admin can not subscribe!')
-            return redirect('/')
-        elif user['subexpiredate'] is not None:
-            arr = user['subexpiredate'].split('-')
-            year = datetime.now().year
-            month = datetime.now().month
-            if arr[0] < year:
-                return render(request, 'subscribe.html')
-            elif arr[0] == year and arr[1] < month:
-                return render(request, 'subscribe.html')
-            else:
-                messages.error(request, 'You have already subscribed!')
-                return redirect('/')
-        else:
-            return render(request, 'subscribe.html', {'user': user})
+            messages.error(request, 'Admin do not need to subscribe.')
+            return redirect('/movies')
+        return render(request, 'subscribe.html', {'user': user})
 
-    if request.method == 'POST':
+    elif request.method == 'POST':
         try:
             this_user = request.session['user']
         except:
@@ -206,7 +192,7 @@ def sub(request):
             messages.error(request, 'Please fill in a valid card number!')
             return redirect('/sub')
         req_body = {
-            "subexpiredate": "2019-01"
+            "subexpiredate": "2019-01-31"
         }
         userId = this_user['userId']
         url = mc_url + '/user/' + str(userId)
@@ -214,7 +200,7 @@ def sub(request):
         res = requests.put(url, data=req_body, headers=json_headers)
         res_body = json.loads(res.content.decode('utf-8'))
         if res.status_code == 200:
-            request.session['user']['subexpiredate'] = "2019-01"
+            request.session['user'] = res_body['user']
             messages.success(request, 'Thank you for subscribing!')
         else:
             messages.error(request, res_body['error'])
@@ -413,7 +399,6 @@ def movieDetail(request, movieId):
     res_review = requests.get(url_review).json()
 
     movie = res_movie['movie']
-    logging.info(movie)
     reviews = res_review['content']
     user = request.session['user']
 
@@ -427,19 +412,20 @@ def movieDetail(request, movieId):
         'movie': movie,
         'reviews': reviews
     }
-
-    logging.info(data)
-    if user['subexpiredate']:
-        subexpireMonth = int(user['subexpiredate'].split('-')[1])
-    else:
-        subexpireMonth = -1
-    currentMonth = datetime.now().month
     if user['role'] == 2:
         return render(request, 'movieDetail.html', data)
-    if movie['movie_type'] != 1:
-        if subexpireMonth < currentMonth:
-            return redirect('/sub/')
-    return render(request, 'movieDetail.html', data)
+    if user['subexpiredate']:
+        subexpiredate = user['subexpiredate'].split('-')
+        sYear = int(subexpiredate[0])
+        sMonth = int(subexpiredate[1])
+        sDate = int(subexpiredate[2])
+        currentDate = datetime.now()
+        year = currentDate.year
+        month = currentDate.month
+        date = currentDate.date
+        if sYear > year or (sYear == year and sMonth > month) or (sYear == year and sMonth == mont and sDate > date):
+            return render(request, 'movieDetail.html', data)
+    return redirect('/sub/')
 
 def postReview(request, movieId):
     url = mc_url + '/movie-review'
