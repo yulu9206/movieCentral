@@ -573,7 +573,40 @@ def edit(request, movieId = ''):
         return redirect('/edit/' + str(id))
 
 def toptenwatching(request):
-    return render(request, 'topten.html', {"user": request.session['user']})
+    lastmonth = {"id":[30,4,3,1,2,29,10,21,20,26], "counts":[30,28,20,19,18,13,8,6,0,0]}
+    url1 = mc_url + '/movies'
+    res1 = requests.get(url1).json()
+    data = res1['content']
+
+    toreturn = []
+    for i in lastmonth['id']:
+        for j in data:
+            if j['movieId'] == i:
+                toreturn.append(j)
+    return render(request, 'toptenwatching.html', {"user": request.session['user'], "lastmonth": lastmonth, "movies": toreturn})
+
+def delete(request, movieId):
+    url = mc_url + '/movie/' + str(movieId)
+    logging.info(url)
+    data = {"movieId": movieId}
+    data = json.dumps(data)
+    r = requests.delete(url, headers=json_headers, data=data)
+    if r.status_code == 200:
+        messages.success(request, 'Deleted!')
+    else:
+        messages.error(request, 'Deletion failed!')
+    url1 = mc_url + '/movies'
+    url2 = mc_url + '/movie-genre/'
+    res1 = requests.get(url1).json()
+    data = res1['content']
+    for i in range(len(data)):
+        res2 = requests.get(url2 + str(data[i]['movieId'])).json()
+        temp = res2['genres']
+        if len(temp) >= 1:
+            data[i]['genre'] = temp
+        else:
+            data[i]['genre'] = ""
+    return redirect('/edit', {"data": data, "user": request.session['user']})
 
 # def db(request):
 # 	greeting = Greeting()
