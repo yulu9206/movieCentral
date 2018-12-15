@@ -23,7 +23,6 @@ urlpatterns = [
     path('post-login/', hello.views.login),
     path('logout/', hello.views.logout),
     path('register/', hello.views.register),
-    path('customer-detail/', hello.views.customerDetail),
     path('addmovie/', hello.views.addMovie),
     path('sub/', hello.views.sub),
     url('movie-detail/(?P<movieId>\d+)$', hello.views.movieDetail),
@@ -40,5 +39,4 @@ urlpatterns = [
     path('toptenwatching/', hello.views.toptenwatching),
     url('delete/(?P<movieId>\d+)$', hello.views.delete),
     path('toptenrating/', hello.views.topTenRating),
-    path('toptenwatching/', hello.views.topTenWatching),
 ]
