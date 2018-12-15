@@ -1,30 +1,21 @@
-# Python: Getting Started
-
+## Inroduction
+This UI repo starts from a barebones Django app, which can easily be deployed to Heroku.
+Deployed at:https://sleepy-shore-81319.herokuapp.com/
 
 ## Running Locally
 
 Make sure you have Python 3.7 [installed locally](http://install.python-guide.org). 
 
 ```sh
-$ git clone https://github.com/heroku/python-getting-started.git
+$ git clone https://github.com/yulu9206/movieCentralUI.git
 $ cd python-getting-started
 
-$ python3 -m venv getting-started
+$ source mc-env/bin/activate
+or
 $ pip install -r requirements.txt
 
-$ createdb python_getting_started
-
-$ python manage.py migrate
-$ python manage.py collectstatic
-
-$ heroku local
+$ python manage.py runserver
 ```
-
-Your app should now be running on [localhost:5000](http://localhost:5000/).
-
-## Deploying to Heroku
-
-
 ## URL Documentation
 ### Customer & Admin
     /login/, login and registration page
