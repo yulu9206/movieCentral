@@ -41,12 +41,6 @@ mc_url = 'http://ec2-18-219-67-50.us-east-2.compute.amazonaws.com:8080/dos/api'
 json_headers = dict()
 json_headers['Content-Type'] = 'application/json;charset=UTF-8'
 
-# messages.debug(request, '%s SQL statements were executed.' % count)
-# messages.info(request, 'Three credits remain in your account.')
-# messages.success(request, 'Profile details updated.')
-# messages.warning(request, 'Your account expires in three days.')
-# messages.error(request, 'Document deleted.')
-
 def register(request):
     if request.method == 'POST':
         data = {
@@ -112,13 +106,15 @@ def activate(request, uid, token):
     return redirect('/login')
 
 def index(request):
-    try:
-        this_user = request.session['user']
+    user = request.session.get('user')
+    if user:
         data = {
-        'user': this_user
+        'this_user': request.session['user']
         }
-    except:
+        
+    else:
         data = {}
+    logging.info(data)
     return render(request, 'homepage.html', data)
 
 def profile(request):
@@ -253,6 +249,7 @@ def login(request):
     res_body = json.loads(res.content.decode('utf-8'))
     if res.status_code == 200:
         request.session['user'] = res_body['user']
+        session.get_expire_at_browser_close()
         return redirect('/')
     else:
         messages.error(request, res_body['error'])
@@ -412,9 +409,9 @@ def movieDetail(request, movieId):
         'movie': movie,
         'reviews': reviews
     }
-    if user['role'] == 2:
+    if user and  user['role'] and user['role']== 2:
         return render(request, 'movieDetail.html', data)
-    if user['subexpiredate']:
+    if user and user['subexpiredate']:
         subexpiredate = user['subexpiredate'].split('-')
         sYear = int(subexpiredate[0])
         sMonth = int(subexpiredate[1])

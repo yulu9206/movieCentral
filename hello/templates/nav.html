@@ -32,7 +32,7 @@
       <li class="active">
         <a href="/"><span class="glyphicon glyphicon-home"></span> MC Home</a>
       </li>
-      {% if user %}
+      {% if this_user %}
       <li>
         <a href="/movies"><span class="glyphicon glyphicon-film"></span> Movies</a>
       </li>
@@ -43,7 +43,9 @@
             <li><a href="/toptenwatching">Top Ten Watching </a></li>
           </ul>
       </li>
-      {% if user.role is 2 %}
+      {% endif %}
+
+      {% if this_user.role is 2 %}
       <li>
         <a href="/customers"><span class="glyphicon glyphicon-info-sign"></span> Customers</a>
       </li>
@@ -55,7 +57,7 @@
             <li><a href="/edit">Edit Movies </a></li>
           </ul>
       </li>
-      {% endif %}
+      
       {% endif %}
     </ul>
     <ul class="nav navbar-nav navbar-right">
