@@ -332,7 +332,7 @@ def editReview(request, movieId, reviewId):
         starCount = review['stars']
         review['stars'] = 's' * starCount
         review['nostars'] = 'n'* (5 - starCount)
-    
+
     data = {
         'user': user,
         'movie': movie,
@@ -534,25 +534,47 @@ def financial(request):
                                             , "total_i": total_i})
 
 def edit(request, movieId = ''):
-    if movieId == '':
-        url1 = mc_url + '/movies'
-        url2 = mc_url + '/movie-genre/'
-        res1 = requests.get(url1).json()
-        data = res1['content']
-        for i in range(len(data)):
-            res2 = requests.get(url2 + str(data[i]['movieId'])).json()
-            temp = res2['genres']
-            if len(temp) >= 1:
-                data[i]['genre'] = temp
-            else:
-                data[i]['genre'] = ""
-        logging.info(data)
-        return render(request, 'edit.html', {"data": data, "user": request.session['user']})
-    else:
-        url = mc_url + '/movie/' + str(movieId)
-        res = requests.get(url).json()
-        logging.info(res)
-        return render(request, 'edit.html', {"id": res})
+    if request.method == 'GET':
+        if movieId == '':
+            url1 = mc_url + '/movies'
+            url2 = mc_url + '/movie-genre/'
+            res1 = requests.get(url1).json()
+            data = res1['content']
+            for i in range(len(data)):
+                res2 = requests.get(url2 + str(data[i]['movieId'])).json()
+                temp = res2['genres']
+                if len(temp) >= 1:
+                    data[i]['genre'] = temp
+                else:
+                    data[i]['genre'] = ""
+            return render(request, 'edit.html', {"data": data, "user": request.session['user']})
+        else:
+            url = mc_url + '/movie/' + str(movieId)
+            res = requests.get(url).json()
+            # logging.info(res['movie'])
+            return render(request, 'edit.html', {"movie": res['movie'], "user": request.session['user']})
+    if request.method == 'POST':
+        id = request.POST.get('movieid')
+        payload = { "country": request.POST.get('country'), "coverImageUrl": request.POST.get('imgurl'), "length": request.POST.get('length'),
+                    "movieDesc": request.POST.get('desc'),
+                    "movieTitle": request.POST.get('title'),
+                    "movie_type": request.POST.get('type'),
+                    "mpaaId": request.POST.get('mpaa'),
+                    "releaseDate": request.POST.get('releasedate'),
+                    "studio": request.POST.get('studio'),
+                    "trailerUrl": request.POST.get('trailer') }
+        payload = json.dumps(payload)
+        url = mc_url + '/movie/' + str(id)
+        r = requests.put(url, data=payload, headers=json_headers)
+        if (r.status_code == 200):
+            messages.success(request, 'Updated!')
+        else:
+            messages.error(request, 'Update failed!')
+        return redirect('/edit/' + str(id))
+
+def toptenwatching(request):
+    return render(request, 'topten.html', {"user": request.session['user']})
+
 # def db(request):
 # 	greeting = Greeting()
 # 	greeting.save()
