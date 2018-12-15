@@ -39,4 +39,6 @@ urlpatterns = [
     path('edit/', hello.views.edit),
     path('toptenwatching/', hello.views.toptenwatching),
     url('delete/(?P<movieId>\d+)$', hello.views.delete),
+    path('toptenrating/', hello.views.topTenRating),
+    path('toptenwatching/', hello.views.topTenWatching),
 ]
