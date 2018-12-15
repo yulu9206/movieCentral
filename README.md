@@ -19,6 +19,7 @@ $ python manage.py runserver
 ```
 ## URL Documentation
 ### Customer & Admin
+    /, homepage
     /login/, login and registration page
     /logout/, logout
     /profile/, view account detail
