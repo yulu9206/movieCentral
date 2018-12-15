@@ -1,8 +1,5 @@
 # Python: Getting Started
 
-A barebones Django app, which can easily be deployed to Heroku.
-
-This application supports the [Getting Started with Python on Heroku](https://devcenter.heroku.com/articles/getting-started-with-python) article - check it out.
 
 ## Running Locally
 
@@ -38,8 +35,32 @@ or
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
-## Documentation
-
-For more information about using Python on Heroku, see these Dev Center articles:
-
-- [Python on Heroku](https://devcenter.heroku.com/categories/python)
+## URL Documentation
+    /customer/delete/userId, deleteCustomer 
+    /movie-review/reviewId, deleteReview
+    /customer/detail/userId, view customerDetail
+    url(r'^customer/edit/(?P<userId>\d+)$', hello.views.editCustomer),
+    path('profile/', hello.views.profile),
+    path('movies/', hello.views.movies),
+    path('customers/', hello.views.customers),
+    path('login/', hello.views.getlogin),
+    path('post-login/', hello.views.login),
+    path('logout/', hello.views.logout),
+    path('register/', hello.views.register),
+    path('customer-detail/', hello.views.customerDetail),
+    path('addmovie/', hello.views.addMovie),
+    path('sub/', hello.views.sub),
+    url('movie-detail/(?P<movieId>\d+)$', hello.views.movieDetail),
+    url('movie-detail/(?P<movieId>\d+)/(?P<reviewId>\d+)$', hello.views.editReview),
+    url('post-review/(?P<movieId>\d+)$', hello.views.postReview),
+    path('reports/', hello.views.reports),
+    url(r'^activate/(?P<uid>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})$',
+        hello.views.activate, name='activate'),
+    url(r'^history/(?P<userId>\d+)$', hello.views.customerHistory),
+    path('topten/', hello.views.topten),
+    path('financial/', hello.views.financial),
+    url('edit/(?P<movieId>\d+)$', hello.views.edit),
+    path('edit/', hello.views.edit),
+    path('toptenwatching/', hello.views.toptenwatching),
+    url('delete/(?P<movieId>\d+)$', hello.views.delete),
+    path('toptenrating/', hello.views.topTenRating),
