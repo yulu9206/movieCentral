@@ -122,16 +122,11 @@ def index(request):
     return render(request, 'homepage.html', data)
 
 def profile(request):
-    try:
-        url2 = mc_url + '/user/' + str(request.session['user']['userId'])
-        res2 = requests.get(url2).json()
-        user = res2['user']
-        data = {
-            'user': user
-        }
-    except:
-        data = {}
-    return render(request, 'profile.html', data)
+    userId = request.session['user']['userId']
+    url = mc_url + '/user/' + str(userId)
+    res = requests.get(url).json()
+    user = res['user']
+    return render(request, 'profile.html', {'user': user})
 
 def editCustomer(request, userId):
     req_body = {
