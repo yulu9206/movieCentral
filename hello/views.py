@@ -476,8 +476,16 @@ def financial(request):
                                             , "sub_i": sub_i
                                             , "total_i": total_i})
 
-# def db(request):
-# 	greeting = Greeting()
-# 	greeting.save()
-# 	greetings = Greeting.objects.all()
-# 	return render(request, 'db.html', {'greetings': greetings})
+def topTenRating(request):
+    url = mc_url + '/movie-reviews/'
+    res = requests.get(url).json()
+    reviews = res['content']
+    reviews = sorted(reviews, key=lambda review: review['stars'], reverse=True)
+    for review in reviews:
+        starCount =  int(review['stars'])
+        review['stars'] = 's' * starCount
+        review['nostars'] = 'n' * (5 - starCount)
+    return render(request, 'topTenRating.html', {'reviews':reviews})
+
+def topTenWatching(request):
+    return 
