@@ -1,0 +1,124 @@
+{% extends "nav.html" %}
+{% load staticfiles %}
+
+{% block edit %}
+<div class="container">
+  <section>
+    <div class="container-fluid">
+      <h1>Edit Movie</h1>
+    </div>
+    <hr></hr>
+    <div class="row">
+      <div class = "col-sm-8 col-md-8 col-lg-8">
+        {%if data%}
+          <form action='/edit' method='GET'>
+            <table class="table table-hover">
+              <thead>
+                <th>Movie Id</th>
+                <th>Movie Name</th>
+                <th colspan="2">Action</th>
+              </thead>
+              {% for d in data%}
+                <tr>
+                  <td>{{d.movieId}}</td>
+                  <td>{{d.movieTitle}}</td>
+                  <td><a href="/edit/{{d.movieId}}" type="submit" name="edit" value="edit" class="btn btn-info">
+          					Edit
+          				</a></td>
+                  <td><a href="/delete/{{d.movieId}}" type="submit" name="delete" value="delete" class="btn btn-warning">
+          					Delete
+          				</a></td>
+                </tr>
+              {% endfor %}
+            </table>
+          </form>
+        {% endif %}
+        {%if movie%}
+          <form class="form-horizontal" method='POST'>
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="movieid" class="col-sm-2 control-label">Movie Id</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" name="movieid" id="movieid" value="{{movie.movieId}}" readonly>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="title" class="col-sm-2 control-label">Movie Title</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" name="title" id="title" value="{{movie.movieTitle}}">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="type" class="col-sm-2 control-label">Movie Type</label>
+              <div class="col-sm-10">
+                <input type="radio" name="type" value="1" {% if movie.movie_type == 1 %} checked {% endif %}>Free for All<br>
+                <input type="radio" name="type" value="2" {% if movie.movie_type == 2 %} checked {% endif %}>Subscription Only<br>
+                <input type="radio" name="type" value="3" {% if movie.movie_type == 3 %} checked {% endif %}>Pay Per View<br>
+                <input type="radio" name="type" value="4" {% if movie.movie_type == 4 %} checked {% endif %}>Paid
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="country" class="col-sm-2 control-label">Country</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" name="country" id="country" >
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="imgurl" class="col-sm-2 control-label">Cover Image URL</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="imgurl" name="imgurl" value={{movie.coverImageUrl}} >
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="length" class="col-sm-2 control-label">Length</label>
+              <div class="col-sm-10">
+                <input type="number" class="form-control" name="length" id="length" value={{movie.length}} >
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="desc" class="col-sm-2 control-label">Movie Description</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" name="desc" id="desc" value="{{movie.movieDesc}}" >
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="mpaa" class="col-sm-2 control-label">MPAA Rating</label>
+              <div class="col-sm-10">
+                <input type="radio" name="mpaa" value="1" {% if movie.mpaaRating == "G" %} checked {% endif %}>G<br>
+                <input type="radio" name="mpaa" value="2" {% if movie.mpaaRating == "PG" %} checked {% endif %}>PG<br>
+                <input type="radio" name="mpaa" value="3" {% if movie.mpaaRating == "PG-13" %} checked {% endif %}>PG-13<br>
+                <input type="radio" name="mpaa" value="4" {% if movie.mpaaRating == "R" %} checked {% endif %}>R<br>
+                <input type="radio" name="mpaa" value="5" {% if movie.mpaaRating == "NC-17" %} checked {% endif %}>NC-17<br>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="releasedate" class="col-sm-2 control-label">Release Date</label>
+              <div class="col-sm-10">
+                <input type="date" class="form-control" name="releasedate" id="releasedate" value="{{movie.releaseDate}}" >
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="studio" class="col-sm-2 control-label">Studio</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" name="studio" id="studio" >
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="trailer" class="col-sm-2 control-label">Trailer URL</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" name="trailer" id="trailer" value="{{movie.trailerUrl}}" >
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" formaction="/edit/{{movie.movieId}}" class="btn btn-default">Update</button>
+              </div>
+            </div>
+          </form>
+        {% endif %}
+      </div>
+    </div>
+    <hr></hr>
+  </section>
+</div>
+{% endblock %}

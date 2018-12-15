@@ -180,7 +180,25 @@ def postEditReview(request, reviewId):
 
 def sub(request):
     if request.method == 'GET':
-        return render(request, 'subscribe.html')
+        url = mc_url + '/user/' + str(request.session['user']['userId'])
+        res = requests.get(url).json()
+        user = res['user']
+        if user['role'] == 2:
+            messages.error(request, 'Admin can not subscribe!')
+            return redirect('/')
+        elif user['subexpiredate'] is not None:
+            arr = user['subexpiredate'].split('-')
+            year = datetime.now().year
+            month = datetime.now().month
+            if arr[0] < year:
+                return render(request, 'subscribe.html')
+            elif arr[0] == year and arr[1] < month:
+                return render(request, 'subscribe.html')
+            else:
+                messages.error(request, 'You have already subscribed!')
+                return redirect('/')
+        else:
+            return render(request, 'subscribe.html', {'user': user})
 
     if request.method == 'POST':
         try:
@@ -205,7 +223,6 @@ def sub(request):
             messages.success(request, 'Thank you for subscribing!')
         else:
             messages.error(request, res_body['error'])
-        user = request.session['user']
         return redirect('/profile')
 
 def addMovie(request):
@@ -315,7 +332,7 @@ def editReview(request, movieId, reviewId):
         starCount = review['stars']
         review['stars'] = 's' * starCount
         review['nostars'] = 'n'* (5 - starCount)
-    
+
     data = {
         'user': user,
         'movie': movie,
@@ -345,18 +362,53 @@ def customerDetail(request, userId):
     return render(request, 'customerDetail.html', {'userDetail':userDetail})
 
 def movies(request):
-    url1 = mc_url + '/movies'
-    url2 = mc_url + '/movie-genre/'
-    res1 = requests.get(url1).json()
-    data = res1['content']
-    for i in range(len(data)):
-        res2 = requests.get(url2 + str(data[i]['movieId'])).json()
-        temp = res2['genres']
-        if len(temp) >= 1:
-            data[i]['genre'] = temp[0]['genreName']
-        else:
-            data[i]['genre'] = ""
-    return render(request, 'movies.html', {"data": data, "user": request.session['user']})
+    if request.method == 'GET':
+        # get-data
+        url1 = mc_url + '/movies'
+        url2 = mc_url + '/movie-genre/'
+        res1 = requests.get(url1).json()
+        data = res1['content']
+        for i in range(len(data)):
+            res2 = requests.get(url2 + str(data[i]['movieId'])).json()
+            temp = res2['genres']
+            if len(temp) >= 1:
+                data[i]['genre'] = temp
+            else:
+                data[i]['genre'] = ""
+        return render(request, 'movies.html', {"data": data, "user": request.session['user']})
+    if request.method == 'POST':
+        # logging.info(request.POST.get('title'))
+        title = request.POST.get('title')
+        genre = request.POST.getlist('genre')
+        desc = request.POST.get('desc')
+
+        url1 = mc_url + '/movies'
+        url2 = mc_url + '/movie-genre/'
+        res1 = requests.get(url1).json()
+        data = res1['content']
+        for i in range(len(data)):
+            res2 = requests.get(url2 + str(data[i]['movieId'])).json()
+            temp = res2['genres']
+            if len(temp) >= 1:
+                data[i]['genre'] = temp
+            else:
+                data[i]['genre'] = ""
+        toreturn = []
+        for d in data:
+            gen = []
+            flag = False
+            for g in d['genre']:
+                gen.append(g['genreName'])
+            if title in d['movieTitle'] and desc in d['movieDesc']:
+                for g in genre:
+                    if g not in gen:
+                        flag = True
+            else:
+                flag = True
+            if not flag:
+                toreturn.append(d)
+
+        return render(request, 'movies.html', {"data":toreturn, "user":request.session['user']})
 
 def movieDetail(request, movieId):
     url_movie = mc_url + '/movie/' + movieId
@@ -366,6 +418,7 @@ def movieDetail(request, movieId):
     res_review = requests.get(url_review).json()
 
     movie = res_movie['movie']
+    logging.info(movie)
     reviews = res_review['content']
     user = request.session['user']
 
@@ -373,7 +426,7 @@ def movieDetail(request, movieId):
         starCount = review['stars']
         review['stars'] = 's' * starCount
         review['nostars'] = 'n'* (5 - starCount)
-    
+
     data = {
         'user': user,
         'movie': movie,
@@ -381,14 +434,18 @@ def movieDetail(request, movieId):
     }
 
     logging.info(data)
-
-    subexpireMonth = int(user['subexpiredate'].split('-')[1])
+    if user['subexpiredate']:
+        subexpireMonth = int(user['subexpiredate'].split('-')[1])
+    else:
+        subexpireMonth = -1
     currentMonth = datetime.now().month
+    if user['role'] == 2:
+        return render(request, 'movieDetail.html', data)
     if movie['movie_type'] != 1:
         if subexpireMonth < currentMonth:
             return redirect('/sub/')
     return render(request, 'movieDetail.html', data)
-    
+
 def postReview(request, movieId):
     url = mc_url + '/movie-review'
     req_body = {
@@ -476,6 +533,81 @@ def financial(request):
                                             , "sub_i": sub_i
                                             , "total_i": total_i})
 
+def edit(request, movieId = ''):
+    if request.method == 'GET':
+        if movieId == '':
+            url1 = mc_url + '/movies'
+            url2 = mc_url + '/movie-genre/'
+            res1 = requests.get(url1).json()
+            data = res1['content']
+            for i in range(len(data)):
+                res2 = requests.get(url2 + str(data[i]['movieId'])).json()
+                temp = res2['genres']
+                if len(temp) >= 1:
+                    data[i]['genre'] = temp
+                else:
+                    data[i]['genre'] = ""
+            return render(request, 'edit.html', {"data": data, "user": request.session['user']})
+        else:
+            url = mc_url + '/movie/' + str(movieId)
+            res = requests.get(url).json()
+            # logging.info(res['movie'])
+            return render(request, 'edit.html', {"movie": res['movie'], "user": request.session['user']})
+    if request.method == 'POST':
+        id = request.POST.get('movieid')
+        payload = { "country": request.POST.get('country'), "coverImageUrl": request.POST.get('imgurl'), "length": request.POST.get('length'),
+                    "movieDesc": request.POST.get('desc'),
+                    "movieTitle": request.POST.get('title'),
+                    "movie_type": request.POST.get('type'),
+                    "mpaaId": request.POST.get('mpaa'),
+                    "releaseDate": request.POST.get('releasedate'),
+                    "studio": request.POST.get('studio'),
+                    "trailerUrl": request.POST.get('trailer') }
+        payload = json.dumps(payload)
+        url = mc_url + '/movie/' + str(id)
+        r = requests.put(url, data=payload, headers=json_headers)
+        if (r.status_code == 200):
+            messages.success(request, 'Updated!')
+        else:
+            messages.error(request, 'Update failed!')
+        return redirect('/edit/' + str(id))
+
+def toptenwatching(request):
+    lastmonth = {"id":[30,4,3,1,2,29,10,21,20,26], "counts":[30,28,20,19,18,13,8,6,0,0]}
+    url1 = mc_url + '/movies'
+    res1 = requests.get(url1).json()
+    data = res1['content']
+
+    toreturn = []
+    for i in lastmonth['id']:
+        for j in data:
+            if j['movieId'] == i:
+                toreturn.append(j)
+    return render(request, 'toptenwatching.html', {"user": request.session['user'], "lastmonth": lastmonth, "movies": toreturn})
+
+def delete(request, movieId):
+    url = mc_url + '/movie/' + str(movieId)
+    logging.info(url)
+    data = {"movieId": movieId}
+    data = json.dumps(data)
+    r = requests.delete(url, headers=json_headers, data=data)
+    if r.status_code == 200:
+        messages.success(request, 'Deleted!')
+    else:
+        messages.error(request, 'Deletion failed!')
+    url1 = mc_url + '/movies'
+    url2 = mc_url + '/movie-genre/'
+    res1 = requests.get(url1).json()
+    data = res1['content']
+    for i in range(len(data)):
+        res2 = requests.get(url2 + str(data[i]['movieId'])).json()
+        temp = res2['genres']
+        if len(temp) >= 1:
+            data[i]['genre'] = temp
+        else:
+            data[i]['genre'] = ""
+    return redirect('/edit', {"data": data, "user": request.session['user']})
+  
 def topTenRating(request):
     url = mc_url + '/movie-reviews/'
     res = requests.get(url).json()
@@ -486,6 +618,3 @@ def topTenRating(request):
         review['stars'] = 's' * starCount
         review['nostars'] = 'n' * (5 - starCount)
     return render(request, 'topTenRating.html', {'reviews':reviews})
-
-def topTenWatching(request):
-    return 

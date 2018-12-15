@@ -35,6 +35,10 @@ urlpatterns = [
     url(r'^history/(?P<userId>\d+)$', hello.views.customerHistory),
     path('topten/', hello.views.topten),
     path('financial/', hello.views.financial),
+    url('edit/(?P<movieId>\d+)$', hello.views.edit),
+    path('edit/', hello.views.edit),
+    path('toptenwatching/', hello.views.toptenwatching),
+    url('delete/(?P<movieId>\d+)$', hello.views.delete),
     path('toptenrating/', hello.views.topTenRating),
     path('toptenwatching/', hello.views.topTenWatching),
 ]

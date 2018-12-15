@@ -19,16 +19,16 @@
       </div>
       <div class="col-lg-3 col-md-3 col-sm-3">
         <br><br><br>
-        <p>Genre: {{movie.genres.0.genreName}}</p>
+        <p>Genre: {% for g in movie.genres %}{{g.genreName}} {% endfor %}
         <p>Release Date: {{movie.releaseDate}}</p>
         <p>MPAA Rating: {{movie.mpaaRating}}</p>
         <p>Length: {{movie.length}} minutes</p>
         <p>Director: {% for d in movie.directors %}d, {% endfor %}</p>
-        <p>Director: {% for d in movie.characters %}d, {% endfor %}</p>
+        <p>Character: {% for d in movie.characters %}d, {% endfor %}</p>
         <p>Review: {{movie.stars}} stars</p>
         <p>Description: {{movie.movieDesc}}</p>
       </div>
-    </div>  
+    </div>
     <div class="row">
         <hr/>
         <h3>How do you like the movie?</h3>

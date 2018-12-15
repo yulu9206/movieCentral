@@ -2,6 +2,7 @@
 {% load staticfiles %}
 
 {% block movies %}
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
 <div class="container">
@@ -11,9 +12,56 @@
   </div>
   <hr></hr>
   <div class="container-fluid">
-    <div class="input-group">
-      <div class="search-container input-group-addon">Name</div>
-      <input type="text" class="form-control search" id="myInput" onkeyup="myFunction()" placeholder="Search for names..">
+    <div class="container-fluid row">
+      <div class="input-group">
+        <div class="search-container input-group-addon">Search</div>
+        <input type="text" class="form-control search" id="myInput" onkeyup="myFunction()" placeholder="Type here to search for movie titles, genres, directors, characters...">
+      </div>
+    </div>
+    <hr></hr>
+    <div class="container-fluid row">
+      <form class="form-horizontal" method="POST" action='/movies/'>
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="title" class="col-sm-2 control-label">Title </label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" name="title" id="title" placeholder="Movie Title">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="genre" class="col-sm-2 control-label">Genre </label>
+          <div class="col-sm-10">
+            <select multiple class="form-control" name="genre" id="genre">
+              <option value="Action">Action</option>
+              <option value="Adventure">Adventure</option>
+              <option value="Comedy">Comedy</option>
+              <option value="Crime">Crime</option>
+              <option value="Drama">Drama</option>
+              <option value="Fantacy">Fantacy</option>
+              <option value="Historical">Historical</option>
+              <option value="Historical Fiction">Historical Fiction</option>
+              <option value="Horror">Horror</option>
+              <option value="Mystery">Mystery</option>
+              <option value="Political">Political</option>
+              <option value="Romance">Romance</option>
+              <option value="Science Fiction">Science Fiction</option>
+              <option value="Triller">Triller</option>
+              <option value="Western">Western</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="desc" class="col-sm-2 control-label">Description</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" name="desc" id="desc" placeholder="Description">
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-default">Filter</button>
+          </div>
+        </div>
+      </form>
     </div>
   </div>
   <div class="container-fluid">
@@ -30,12 +78,12 @@
               </div>
               <div class="col-lg-2 col-md-2 col-sm-2"></div>
               <div class="col-lg-6 col-md-6 col-sm-6">
-                <p id="genre">Genre: {{d.genre}}</p>
+                <p id="genre">Genre: {% for g in d.genre %} {{g.genreName}} {% endfor %}</p>
                 <p id="date">Release Date: {{d.releaseDate}}</p>
                 <p>MPAA Rating: {{d.mpaaRating}}</p>
                 <p>Length: {{d.length}} minutes</p>
-                <p>Director: {% for da in d.directors %}da, {% endfor %}</p>
-                <p>Director: {% for da in d.characters %}da, {% endfor %}</p>
+                <p id='director'>Director: {% for da in d.directors %}{{da}} {% endfor %}</p>
+                <p id='character'>Characters: {% for da in d.characters %}{{da}} {% endfor %}</p>
                 <p>Review: {{d.stars}} stars</p>
                 <p>Description: {{d.movieDesc}}</p>
                 <p>Type:
@@ -69,24 +117,39 @@ function myFunction() {
   ul = document.getElementById("data");
   li = ul.getElementsByTagName('li');
   for (i = 0; i < li.length; i++) {
-    li[i].id = "";
+    li[i].className = "target";
   }
   if( input.value.length == "" ) {
     pag('#data','#pag',false);
   }
   else {
     for (i = 0; i < li.length; i++) {
-        h4 = li[i].getElementsByTagName("h4")[0];
-        txtValue = h4.textContent || h4.innerText;
+        h4 = li[i].getElementsByTagName('h4')[0].textContent;
+        let t = li[i].getElementsByTagName('p')[0].textContent;
+        let ge = li[i].getElementsByTagName('p')[7].textContent;
+        let di = li[i].getElementsByTagName('p')[4].textContent;
+        let ch = li[i].getElementsByTagName('p')[5].textContent;
+        let t_arr = t.split(':');
+        let ge_arr = ge.split(':');
+        let di_arr = di.split(':');
+        let ch_arr = ch.split(':');
+        if (t_arr.length > 1) t = t_arr[1];
+        else t = "";
+        if (ge_arr.length > 1) ge = ge_arr[1];
+        else ge = "";
+        if (di_arr.length > 1) di = di_arr[1];
+        else di = "";
+        if (ch_arr.length > 1) ch = ch_arr[1];
+        else ch = "";
+        txtValue = h4 + t + ge + di + ch;
         if (txtValue.toUpperCase().indexOf(filter) > -1) {
-            li[i].id = "target";
+            li[i].className = "target";
         } else {
-            li[i].id = "";
+            li[i].className = "";
         }
     }
     pag('#data','#pag',true);
   }
 }
 </script>
-
 {% endblock %}
