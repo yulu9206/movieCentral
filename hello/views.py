@@ -122,7 +122,11 @@ def profile(request):
     url = mc_url + '/user/' + str(userId)
     res = requests.get(url).json()
     user = res['user']
-    return render(request, 'profile.html', {'user': user})
+    data = {
+        'user': user,
+        'this_user': user
+    }
+    return render(request, 'profile.html', data)
 
 def editCustomer(request, userId):
     req_body = {
@@ -175,7 +179,7 @@ def sub(request):
         if user['role'] == 2:
             messages.error(request, 'Admin do not need to subscribe.')
             return redirect('/movies')
-        return render(request, 'subscribe.html', {'user': user})
+        return render(request, 'subscribe.html', {'this_user': user})
 
     elif request.method == 'POST':
         try:
@@ -249,14 +253,14 @@ def login(request):
     res_body = json.loads(res.content.decode('utf-8'))
     if res.status_code == 200:
         request.session['user'] = res_body['user']
-        session.get_expire_at_browser_close()
+        request.session.get_expire_at_browser_close()
         return redirect('/')
     else:
         messages.error(request, res_body['error'])
         return redirect('/login')
 
 def logout(request):
-    request.session['user'] = None
+    del request.session['user']
     return redirect('/')
 
 def customers(request):
@@ -353,7 +357,7 @@ def movies(request):
                 data[i]['genre'] = temp
             else:
                 data[i]['genre'] = ""
-        return render(request, 'movies.html', {"data": data, "user": request.session['user']})
+        return render(request, 'movies.html', {"data": data, "this_user": request.session['user']})
     if request.method == 'POST':
         # logging.info(request.POST.get('title'))
         title = request.POST.get('title')
@@ -386,7 +390,7 @@ def movies(request):
             if not flag:
                 toreturn.append(d)
 
-        return render(request, 'movies.html', {"data":toreturn, "user":request.session['user']})
+        return render(request, 'movies.html', {"data":toreturn, "this_user":request.session['user']})
 
 def movieDetail(request, movieId):
     url_movie = mc_url + '/movie/' + movieId
@@ -405,11 +409,12 @@ def movieDetail(request, movieId):
         review['nostars'] = 'n'* (5 - starCount)
 
     data = {
+        'this_user': user,
         'user': user,
         'movie': movie,
         'reviews': reviews
     }
-    if user and  user['role'] and user['role']== 2:
+    if movie['movie_type'] == 1 or user['role']== 2:
         return render(request, 'movieDetail.html', data)
     if user and user['subexpiredate']:
         subexpiredate = user['subexpiredate'].split('-')
@@ -420,7 +425,7 @@ def movieDetail(request, movieId):
         year = currentDate.year
         month = currentDate.month
         date = currentDate.date
-        if sYear > year or (sYear == year and sMonth > month) or (sYear == year and sMonth == mont and sDate > date):
+        if sYear > year or (sYear == year and sMonth > month) or (sYear == year and sMonth == month and sDate > date):
             return render(request, 'movieDetail.html', data)
     return redirect('/sub/')
 
@@ -461,7 +466,7 @@ def reports(request):
         data[i]['lastday_play'] = d
         data[i]['lastweek_play'] = w
         data[i]['lastmonth_play'] = m
-    return render(request, 'reports.html', {"data":data, "user": request.session['user']})
+    return render(request, 'reports.html', {"data":data, "this_user": request.session['user']})
 
 def customerHistory(request, userId):
     url = mc_url + '/user/' + userId
@@ -470,7 +475,7 @@ def customerHistory(request, userId):
 
     # placeholder data
     history = {"dates": ['2018-11-10', '2018-10-29', '2018-10-27'], 'times': [3,5,4]}
-    return render(request, 'history.html', {"target": target, "history": history, "user": request.session['user']})
+    return render(request, 'history.html', {"target": target, "history": history, "this_user": request.session['user']})
 
 def topten(request):
     # placeholder data
@@ -478,7 +483,7 @@ def topten(request):
     lastweek = {"id":[29,10,21,1,2,3,4,10,20,26], "counts":[13,8,6,3,2,1,0,0,0,0]}
     lastmonth = {"id":[30,4,3,1,2,29,10,21,20,26], "counts":[30,28,20,19,18,13,8,6,0,0]}
 
-    return render(request, "topten.html", {"user": request.session['user'],
+    return render(request, "topten.html", {"this_user": request.session['user'],
                                             "day": lastday,
                                             "week": lastweek,
                                             "month": lastmonth})
@@ -502,7 +507,7 @@ def financial(request):
             month.append(12)
         else:
             month.append(12 - (m+i)%12)
-    return render(request, "financial.html", {"user": request.session['user']
+    return render(request, "financial.html", {"this_user": request.session['user']
                                             , "ppv":payperview
                                             , "active": active
                                             , "rest": rest
@@ -525,12 +530,12 @@ def edit(request, movieId = ''):
                     data[i]['genre'] = temp
                 else:
                     data[i]['genre'] = ""
-            return render(request, 'edit.html', {"data": data, "user": request.session['user']})
+            return render(request, 'edit.html', {"data": data, "this_user": request.session['user']})
         else:
             url = mc_url + '/movie/' + str(movieId)
             res = requests.get(url).json()
             # logging.info(res['movie'])
-            return render(request, 'edit.html', {"movie": res['movie'], "user": request.session['user']})
+            return render(request, 'edit.html', {"movie": res['movie'], "this_user": request.session['user']})
     if request.method == 'POST':
         id = request.POST.get('movieid')
         payload = { "country": request.POST.get('country'), "coverImageUrl": request.POST.get('imgurl'), "length": request.POST.get('length'),
@@ -561,7 +566,7 @@ def toptenwatching(request):
         for j in data:
             if j['movieId'] == i:
                 toreturn.append(j)
-    return render(request, 'toptenwatching.html', {"user": request.session['user'], "lastmonth": lastmonth, "movies": toreturn})
+    return render(request, 'toptenwatching.html', {"this_user": request.session['user'], "lastmonth": lastmonth, "movies": toreturn})
 
 def delete(request, movieId):
     url = mc_url + '/movie/' + str(movieId)
@@ -584,7 +589,7 @@ def delete(request, movieId):
             data[i]['genre'] = temp
         else:
             data[i]['genre'] = ""
-    return redirect('/edit', {"data": data, "user": request.session['user']})
+    return redirect('/edit', {"data": data, "this_user": request.session['user']})
   
 def topTenRating(request):
     url = mc_url + '/movie-reviews/'
@@ -595,4 +600,8 @@ def topTenRating(request):
         starCount =  int(review['stars'])
         review['stars'] = 's' * starCount
         review['nostars'] = 'n' * (5 - starCount)
-    return render(request, 'topTenRating.html', {'reviews':reviews})
+    data = {
+        'reviews':reviews,
+        'this_user': request.session['user']
+    }
+    return render(request, 'topTenRating.html', data)
