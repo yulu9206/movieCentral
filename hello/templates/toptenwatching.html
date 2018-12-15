@@ -36,8 +36,8 @@
 </div>
 <script>
   var ctx = document.getElementById('lastmonth').getContext('2d');
-  var l = {{ lastmonth.id|safe }};
-  var d = {{ lastmonth.counts|safe }};
+  var l =  lastmonth.id|safe;
+  var d = lastmonth.counts|safe;
   var chart = new Chart(ctx, {
     type: 'line',
     data: {
