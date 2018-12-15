@@ -1,5 +1,6 @@
-## Inroduction
+## Introduction
 This UI repo starts from a barebones Django app, which can easily be deployed to Heroku.
+
 Deployed at:https://sleepy-shore-81319.herokuapp.com/
 
 ## Running Locally
